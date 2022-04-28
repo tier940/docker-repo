@@ -1,0 +1,26 @@
+image: docker:latest
+services:
+  - docker:dind
+before_script:
+  - apk add --update curl && rm -rf /var/cache/apk/*
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+tag-build:
+  stage: build
+  only:
+    - tags
+    - triggers
+  script:
+    # Build image
+    - docker build -t "docker-slim" .
+    
+    # Build docker-slim image
+    - docker run -e DOCKER_HOST=tcp://$(grep docker /etc/hosts | cut -f1):2375 dslim/docker-slim build "docker-slim"
+    - docker tag "docker-slim" "registry.gitlab.com/relightings/public/tools/docker/sdk/aws:latest"
+    - docker tag "docker-slim" "registry.gitlab.com/relightings/public/tools/docker/sdk/aws:$CI_COMMIT_TAG"
+    
+    # Push Gitlab Registry
+    - docker images
+    - docker push "registry.gitlab.com/relightings/public/tools/docker/sdk/aws:latest"
+    - docker push "registry.gitlab.com/relightings/public/tools/docker/sdk/aws:$CI_COMMIT_TAG"
+  tags:
+    - docker
