@@ -1,5 +1,6 @@
 FROM alpine:3
 
+# Squid install
 RUN apk update \
   && apk add --no-cache squid~=5.2
 
@@ -11,6 +12,8 @@ COPY lxc-whitelist /etc/squid/whitelist
 ENV TZ=Asia/Tokyo \
   http_proxy=http://localhost:3128 \
   https_proxy=http://localhost:3128
+
+
 
 EXPOSE 3128
 USER squid
