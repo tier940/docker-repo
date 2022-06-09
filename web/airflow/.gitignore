@@ -1,0 +1,4 @@
+/dags/__pycache__
+!/dags/.gitkeep
+/logs/**/
+!/logs/.gitkeep

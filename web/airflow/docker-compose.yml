@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/root/airflow/dags
+      - ./logs:/root/airflow/logs
+      - ./airflow.cfg/root/airflow/airflow.cfg
+      - ./webserver_config.py/root/airflow/webserver_config.py
