@@ -18,12 +18,12 @@
 """Default configuration for the Airflow webserver"""
 import os
 
-from airflow.www.fab_security.manager import AUTH_DB
+from flask_appbuilder.security.manager import AUTH_DB
 
-# from airflow.www.fab_security.manager import AUTH_LDAP
-# from airflow.www.fab_security.manager import AUTH_OAUTH
-# from airflow.www.fab_security.manager import AUTH_OID
-# from airflow.www.fab_security.manager import AUTH_REMOTE_USER
+# from flask_appbuilder.security.manager import AUTH_LDAP
+# from flask_appbuilder.security.manager import AUTH_OAUTH
+# from flask_appbuilder.security.manager import AUTH_OID
+# from flask_appbuilder.security.manager import AUTH_REMOTE_USER
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -35,8 +35,8 @@ WTF_CSRF_ENABLED = True
 # AUTHENTICATION CONFIG
 # ----------------------------------------------------
 # For details on how to set up each of the following authentication, see
-# http://flask-appbuilder.readthedocs.io/en/latest/security.html# authentication-methods
-# for details.
+# http://flask-appbuilder.readthedocs.io/en/latest/security.html#
+# authentication-methods for details.
 
 # The authentication type
 # AUTH_OID : Is for OpenID
@@ -49,22 +49,14 @@ AUTH_TYPE = AUTH_DB
 # Uncomment to setup Full admin role name
 # AUTH_ROLE_ADMIN = 'Admin'
 
-# Uncomment and set to desired role to enable access without authentication
-# AUTH_ROLE_PUBLIC = 'Viewer'
+# Uncomment to setup Public role name, no authentication needed
+# AUTH_ROLE_PUBLIC = 'Public'
+
+# Set the Public role to Admin to allow full access.
+AUTH_ROLE_PUBLIC = 'Admin'
 
 # Will allow user self registration
 # AUTH_USER_REGISTRATION = True
-
-# The recaptcha it's automatically enabled for user self registration is active and the keys are necessary
-# RECAPTCHA_PRIVATE_KEY = PRIVATE_KEY
-# RECAPTCHA_PUBLIC_KEY = PUBLIC_KEY
-
-# Config for Flask-Mail necessary for user self registration
-# MAIL_SERVER = 'smtp.gmail.com'
-# MAIL_USE_TLS = True
-# MAIL_USERNAME = 'yourappemail@gmail.com'
-# MAIL_PASSWORD = 'passwordformail'
-# MAIL_DEFAULT_SENDER = 'sender@gmail.com'
 
 # The default user self registration role
 # AUTH_USER_REGISTRATION_ROLE = "Public"
@@ -106,7 +98,8 @@ AUTH_TYPE = AUTH_DB
 # that you can use for Apache Airflow.
 # http://flask-appbuilder.readthedocs.io/en/latest/customizing.html#changing-themes
 # Please make sure to remove "navbar_color" configuration from airflow.cfg
-# in order to fully utilize the theme. (or use that property in conjunction with theme)
+# in order to fully utilize the theme. (or use that property in conjunction
+# with theme)
 # APP_THEME = "bootstrap-theme.css"  # default bootstrap
 # APP_THEME = "amelia.css"
 # APP_THEME = "cerulean.css"

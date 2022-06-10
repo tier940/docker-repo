@@ -1,9 +1,20 @@
-FROM python:3.10-slim
+FROM apache/airflow:2.3.2-python3.10
 
 # Setup Airflow
 ENV AIRFLOW_VERSION=2.3.2
 ENV PYTHON_VERSION=3.10
-RUN pip install "apache-airflow[google]==${AIRFLOW_VERSION}" \
-  --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+
+COPY entrypoint.sh /entrypoint.sh
+RUN pip install "apache-airflow[crypto,celery,google,postgres]==${AIRFLOW_VERSION}"
+
+USER root
+RUN chmod +x /entrypoint.sh
+
+USER airflow
+COPY webserver_config.py $AIRFLOW_HOME/
+COPY dags $AIRFLOW_HOME/dags
+
+
 
 EXPOSE 8080
+ENTRYPOINT [ "/entrypoint.sh" ]
