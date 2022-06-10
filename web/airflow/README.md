@@ -1,29 +1,16 @@
 # Docker Airflow2
 ## Informations
 
-* Based on official Airflow 2 Image [apache/airflow2:2.3.2-python3.10](https://hub.docker.com/_/python/) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
+* Based on official Airflow 2 Image [apache/airflow:2.3.2-python3.10](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
 * Docker entrypoint script is forked from [dataops-sre/docker-airflow2](https://github.com/dataops-sre/docker-airflow2)
 * Install [Docker](https://www.docker.com/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
-
-
-## Build
-
-Optionally install [Extra Airflow Packages](https://airflow.incubator.apache.org/installation.html#extra-package) and/or python dependencies at build time :
-
-    docker build --rm --build-arg AIRFLOW_DEPS="datadog,dask" -t tier940/airflow2 .
-    docker build --rm --build-arg PYTHON_DEPS="requests" -t tier940/airflow2 .
-
-or combined
-
-    docker build --rm --build-arg AIRFLOW_DEPS="datadog,dask" --build-arg PYTHON_DEPS="requests" -t tier940/airflow2 .
-
 
 ## Usage
 
 By default, docker-airflow runs Airflow with **SequentialExecutor** :
 
-    docker run -d -p 8080:8080 tier940/airflow2 webserver
+    docker run -d -p 8080:8080 ghcr.io/tier940/airflow2 webserver
 
 If you want to run another executor, use the docker-compose.yml files provided in this repository.
 
@@ -49,7 +36,7 @@ Go to Admin -> Connections and Edit "postgres_default" set this values (equivale
 
 For encrypted connection passwords (in Local or Celery Executor), you must have the same fernet_key. By default docker-airflow generates the fernet_key at startup, you have to set an environment variable in the docker-compose (ie: docker-compose-LocalExecutor.yml) file to set the same key accross containers. To generate a fernet_key :
 
-    docker run tier940/airflow2 python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
+    docker run ghcr.io/tier940/airflow2 python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
 
 ## Configuring Airflow
 
@@ -95,7 +82,7 @@ This can be used to scale to a multi node setup using docker swarm.
 
 If you want to run other airflow sub-commands, such as `list_dags` or `clear` you can do so like this:
 
-    docker run --rm -ti tier940/airflow2 airflow dags list
+    docker run --rm -ti ghcr.io/tier940/airflow2 airflow dags list
 
 or with your docker-compose set up like this:
 
@@ -103,8 +90,8 @@ or with your docker-compose set up like this:
 
 You can also use this to run a bash shell or any other command in the same environment that airflow would be run in:
 
-    docker run --rm -ti tier940/airflow2 bash
-    docker run --rm -ti tier940/airflow2 ipython
+    docker run --rm -ti ghcr.io/tier940/airflow2 bash
+    docker run --rm -ti ghcr.io/tier940/airflow2 ipython
 
 # Simplified SQL database configuration using PostgreSQL
 
