@@ -7,7 +7,7 @@ on:
       - airflow2-v*
 
 jobs:
-  squid:
+  build:
     runs-on: ubuntu-latest
     env:
       REPO_OWNER: ${{ github.repository_owner }}
