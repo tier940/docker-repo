@@ -41,7 +41,7 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ steps.get_version.outputs.VERSION }}
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
-        if: contains(github.ref, 'tags/squid-v')
+        if: contains(github.ref, 'tags/airflow2-v')
         uses: docker/build-push-action@v2
         with:
           context: ./web/airflow
