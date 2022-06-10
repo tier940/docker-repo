@@ -4,10 +4,10 @@ on:
   push:
     tags:
       - squid-v*
+      - airflow2-v*
 
 jobs:
   squid:
-    if: contains(github.ref, 'tags/squid-v')
     runs-on: ubuntu-latest
     env:
       REPO_OWNER: ${{ github.repository_owner }}
@@ -28,13 +28,24 @@ jobs:
       - name: Get the version
         id: get_version
         run: |-
-          echo ::set-output name=LXC_VERSION::$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
+          echo ::set-output name=VERSION::$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
 
-      - name: Push image to GitHub Container Registry
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/squid-v')
         uses: docker/build-push-action@v2
         with:
           context: ./proxy/squid
           push: true
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:latest
-            ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ steps.get_version.outputs.LXC_VERSION }}
+            ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ steps.get_version.outputs.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/squid-v')
+        uses: docker/build-push-action@v2
+        with:
+          context: ./web/airflow
+          push: true
+          tags: |
+            ghcr.io/${{ env.REPO_OWNER }}/airflow2:latest
+            ghcr.io/${{ env.REPO_OWNER }}/airflow2:${{ steps.get_version.outputs.VERSION }}

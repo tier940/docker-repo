@@ -1,46 +1,29 @@
 # Docker Airflow2
-* Source code from [dataops-sre/docker-airflow2](https://github.com/dataops-sre/docker-airflow2).
-
 ## Informations
 
 * Based on official Airflow 2 Image [apache/airflow2:2.3.2-python3.10](https://hub.docker.com/_/python/) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
-* Docker entrypoint script is forked from [puckel/docker-airflow](https://github.com/puckel/docker-airflow)
+* Docker entrypoint script is forked from [dataops-sre/docker-airflow2](https://github.com/dataops-sre/docker-airflow2)
 * Install [Docker](https://www.docker.com/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
-
-
-## Motivation
-This repo is forked form [puckel/docker-airflow](https://github.com/puckel/docker-airflow), the original repo seems not maintained.
-
-Airflow is been updated to version 2 and release its [official docker image](https://hub.docker.com/r/apache/airflow), you can also find [bitnami airflow image](https://hub.docker.com/r/bitnami/airflow). Nevertheless, puckel's image is still interesting, in the market none of providers offer an Airflow run with LocalExecutor with scheduler in one container, it is extremely usefull when to deploy a simple Airflow to an AWS EKS cluster. With Kubernetes you can resolve Airflow scablity issue by using uniquely KubernetesPodOpetertor in your dags, then we need zero computational power for airflow, it serves pure purpose of scheduler, seperate scheduler and webserver into two different pods is a bit problematic on AWS EKS cluster, we want to keep dags and logs into a Persistant volume, but AWS has some limitation for EBS volume multi attach, which means webserver and scheduler pod has to be scheduled on the same EKS node, it is a bit annoying. Thus puckel's airflow startup script is usefull.
-
-what this fork do :
-
-* Disactive by default the login screen in Airflow 2
-* Improve current script to only take into account Airflow environment variables
-* Make sure docker compose files works
-* Add Airflow2 deployment helm chart and release a public repository in Github
-
-You can use the helm chart release in this repository, see [here](https://dataops-sre.github.io/docker-airflow2) to deploys airflow2 to a Kubernetes cluster.
 
 
 ## Build
 
 Optionally install [Extra Airflow Packages](https://airflow.incubator.apache.org/installation.html#extra-package) and/or python dependencies at build time :
 
-    docker build --rm --build-arg AIRFLOW_DEPS="datadog,dask" -t dataopssre/docker-airflow2 .
-    docker build --rm --build-arg PYTHON_DEPS="requests" -t dataopssre/docker-airflow2 .
+    docker build --rm --build-arg AIRFLOW_DEPS="datadog,dask" -t tier940/airflow2 .
+    docker build --rm --build-arg PYTHON_DEPS="requests" -t tier940/airflow2 .
 
 or combined
 
-    docker build --rm --build-arg AIRFLOW_DEPS="datadog,dask" --build-arg PYTHON_DEPS="requests" -t dataopssre/docker-airflow2 .
+    docker build --rm --build-arg AIRFLOW_DEPS="datadog,dask" --build-arg PYTHON_DEPS="requests" -t tier940/airflow2 .
 
 
 ## Usage
 
 By default, docker-airflow runs Airflow with **SequentialExecutor** :
 
-    docker run -d -p 8080:8080 puckel/docker-airflow webserver
+    docker run -d -p 8080:8080 tier940/airflow2 webserver
 
 If you want to run another executor, use the docker-compose.yml files provided in this repository.
 
@@ -66,7 +49,7 @@ Go to Admin -> Connections and Edit "postgres_default" set this values (equivale
 
 For encrypted connection passwords (in Local or Celery Executor), you must have the same fernet_key. By default docker-airflow generates the fernet_key at startup, you have to set an environment variable in the docker-compose (ie: docker-compose-LocalExecutor.yml) file to set the same key accross containers. To generate a fernet_key :
 
-    docker run dataopssre/docker-airflow2 python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
+    docker run tier940/airflow2 python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)"
 
 ## Configuring Airflow
 
@@ -112,7 +95,7 @@ This can be used to scale to a multi node setup using docker swarm.
 
 If you want to run other airflow sub-commands, such as `list_dags` or `clear` you can do so like this:
 
-    docker run --rm -ti dataopssre/docker-airflow2 airflow dags list
+    docker run --rm -ti tier940/airflow2 airflow dags list
 
 or with your docker-compose set up like this:
 
@@ -120,8 +103,8 @@ or with your docker-compose set up like this:
 
 You can also use this to run a bash shell or any other command in the same environment that airflow would be run in:
 
-    docker run --rm -ti dataopssre/docker-airflow2 bash
-    docker run --rm -ti dataopssre/docker-airflow2 ipython
+    docker run --rm -ti tier940/airflow2 bash
+    docker run --rm -ti tier940/airflow2 ipython
 
 # Simplified SQL database configuration using PostgreSQL
 
