@@ -30,6 +30,4 @@ RUN chmod +x /entrypoint.sh
 # Finalize
 USER container
 ENTRYPOINT [ "/entrypoint.sh" ]
-# ENTRYPOINT [ "/usr/local/lsws/bin/lswsctrl" ]
-# CMD [ "start" ]
 WORKDIR /usr/local/lsws/
