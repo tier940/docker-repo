@@ -5,6 +5,7 @@ on:
     tags:
       - squid-v*
       - airflow2-v*
+      - litespeed-v*
 
 jobs:
   build:
@@ -49,3 +50,13 @@ jobs:
           tags: |
             ghcr.io/${{ env.REPO_OWNER }}/airflow2:latest
             ghcr.io/${{ env.REPO_OWNER }}/airflow2:${{ steps.get_version.outputs.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/litespeed-v')
+        uses: docker/build-push-action@v2
+        with:
+          context: ./web/litespeed
+          push: true
+          tags: |
+            ghcr.io/${{ env.REPO_OWNER }}/litespeed:latest
+            ghcr.io/${{ env.REPO_OWNER }}/litespeed:${{ steps.get_version.outputs.VERSION }}
