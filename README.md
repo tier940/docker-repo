@@ -13,5 +13,6 @@
 
 ### Web
 * [Airflow 2](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
+* [LiteSpeed](/web/litespeed/) - [ghcr.io/tier940/litespeed:latest](https://github.com/tier940/docker-repo/pkgs/container/litespeed)
 * [Nginx](/web/nginx/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
 * [PHP 8.0](/web/php/8.0/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
