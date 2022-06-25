@@ -16,8 +16,6 @@ RUN wget http://rpms.litespeedtech.com/debian/enable_lst_debian_repo.sh && \
   bash enable_lst_debian_repo.sh && \
   rm /enable_lst_debian_repo.sh && \
   apt-get install -y openlitespeed mysql-client $PHP_VERSION $PHP_VERSION-common $PHP_VERSION-mysql $PHP_VERSION-opcache $PHP_VERSION-curl $PHP_VERSION-imagick $PHP_VERSION-redis $PHP_VERSION-memcached $PHP_VERSION-intl && \
-  useradd -d /home/container -m container && \
-  chown -R container:container /usr/local/lsws/ && \
   apt-get -y clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -28,6 +26,5 @@ RUN chmod +x /entrypoint.sh
 
 
 # Finalize
-USER container
 ENTRYPOINT [ "/entrypoint.sh" ]
 WORKDIR /usr/local/lsws/
