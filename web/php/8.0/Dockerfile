@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM docker.io/php:8.0-fpm
 RUN adduser nginx
 
 # App install
@@ -22,7 +22,7 @@ RUN curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash -  \
     && npm install -g yarn npm-check-updates
 
 # Composer install
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=docker.io/composer /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin

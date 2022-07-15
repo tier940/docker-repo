@@ -1,4 +1,4 @@
-FROM nginx:stable-alpine
+FROM docker.io/nginx:stable-alpine
 
 # Nginx setup
 COPY ./nginx.conf /etc/nginx/
