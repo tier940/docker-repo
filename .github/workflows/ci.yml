@@ -34,6 +34,8 @@ jobs:
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/squid-v')
         uses: docker/build-push-action@v2
+        env:
+          DOCKER_CONTENT_TRUST: 1
         with:
           context: ./proxy/squid
           push: true
@@ -44,6 +46,8 @@ jobs:
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')
         uses: docker/build-push-action@v2
+        env:
+          DOCKER_CONTENT_TRUST: 1
         with:
           context: ./web/airflow
           push: true
@@ -54,6 +58,8 @@ jobs:
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/litespeed-v')
         uses: docker/build-push-action@v2
+        env:
+          DOCKER_CONTENT_TRUST: 1
         with:
           context: ./web/litespeed
           push: true
