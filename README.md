@@ -1,7 +1,7 @@
 # tier940/docker-repo
 ## Docker List
 ### Proxy
-* [Squid 5.5](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
+* [Squid 5.7](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
 
 ### SDK
 * [AWS](/sdk/aws/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)

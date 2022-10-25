@@ -3,7 +3,7 @@ FROM docker.io/alpine:3
 # Squid install
 ENV TZ=Asia/Tokyo
 RUN apk update \
-  && apk add --no-cache squid~=5.5-r0
+  && apk add --no-cache squid~=5.7-r0
 
 COPY squid.conf /etc/squid/
 COPY lxc-whitelist /etc/squid/whitelist
