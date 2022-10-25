@@ -1,4 +1,4 @@
-FROM docker.io/alpine:3
+FROM docker.io/alpine:edge
 
 # Squid install
 ENV TZ=Asia/Tokyo
