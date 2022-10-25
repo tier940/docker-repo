@@ -1,4 +1,4 @@
-FROM docker.io/apache/airflow:2.3.3-python3.10
+FROM docker.io/apache/airflow:2.4.2-python3.10
 
 # Setup Airflow
 ENV AIRFLOW_VERSION=2.3.3
