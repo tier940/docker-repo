@@ -20,6 +20,10 @@
 .azure.com
 .azureedge.net
 .azurecr.io
+
+.vscode.dev
+.vscode-cdn.ne
+.vscode-unpkg.net
 .visualstudio.com
 
 .github.com
@@ -27,7 +31,6 @@
 .githubassets.com
 .githubusercontent.com
 .ghcr.io
-.vscode-unpkg.net
 .gitlab.com
 .circle.ci
 .docker.com
@@ -35,3 +38,6 @@
 
 .slack.com
 .mattermost.com
+.atlassian.net
+.atlassian.com
+.notion.so
