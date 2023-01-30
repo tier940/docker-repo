@@ -31,8 +31,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: |-
-          echo "VERSION=$(echo ${GITHUB_REF}" | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
+        run: echo VERSION=$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}') >> $GITHUB_ENV
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/squid-v')
@@ -42,11 +41,10 @@ jobs:
         with:
           context: ./proxy/squid
           push: true
-          tags: |
-            ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:latest
-            ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ steps.get_version.outputs.VERSION }}
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:latest,ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ env.VERSION }}
 
-      - name: "[ghcr.io/${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
+      - name: "[ghcr.io/[${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')
         uses: docker/build-push-action@v3
         env:
@@ -54,9 +52,8 @@ jobs:
         with:
           context: ./web/airflow
           push: true
-          tags: |
-            ghcr.io/${{ env.REPO_OWNER }}/airflow2:latest
-            ghcr.io/${{ env.REPO_OWNER }}/airflow2:${{ steps.get_version.outputs.VERSION }}
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/airflow2:latest,ghcr.io/${{ env.REPO_OWNER }}/airflow2:${{ env.VERSION }}
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/litespeed-v')
@@ -66,6 +63,5 @@ jobs:
         with:
           context: ./web/litespeed
           push: true
-          tags: |
-            ghcr.io/${{ env.REPO_OWNER }}/litespeed:latest
-            ghcr.io/${{ env.REPO_OWNER }}/litespeed:${{ steps.get_version.outputs.VERSION }}
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/litespeed:latest,ghcr.io/${{ env.REPO_OWNER }}/litespeed:${{ env.VERSION }}
