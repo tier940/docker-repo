@@ -1,7 +1,7 @@
-FROM docker.io/apache/airflow:2.4.3-python3.10
+FROM docker.io/apache/airflow:2.5.1-python3.10
 
 # Setup Airflow
-ENV AIRFLOW_VERSION=2.4.3
+ENV AIRFLOW_VERSION=2.5.1
 ENV PYTHON_VERSION=3.10
 
 COPY entrypoint.sh /entrypoint.sh
