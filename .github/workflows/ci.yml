@@ -14,13 +14,16 @@ jobs:
       REPO_OWNER: ${{ github.repository_owner }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      # - name: Set up QEMU
+      #   uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ env.REPO_OWNER }}
@@ -29,11 +32,11 @@ jobs:
       - name: Get the version
         id: get_version
         run: |-
-          echo ::set-output name=VERSION::$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
+          echo "VERSION=$(echo ${GITHUB_REF}" | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/squid-v')
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
@@ -45,7 +48,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
@@ -57,7 +60,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/litespeed-v')
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
