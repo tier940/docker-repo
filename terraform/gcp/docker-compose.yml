@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  terraform:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ['/bin/bash']
+    container_name: terraform
+    tty: true
+    volumes:
+      - ./:/home/user/work

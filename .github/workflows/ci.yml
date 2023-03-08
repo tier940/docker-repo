@@ -6,6 +6,8 @@ on:
       - squid-v*
       - airflow2-v*
       - litespeed-v*
+      - terraform-aws-v*
+      - terraform-gcp-v*
 
 jobs:
   build:
@@ -65,3 +67,25 @@ jobs:
           push: true
           provenance: false
           tags: ghcr.io/${{ env.REPO_OWNER }}/litespeed:latest,ghcr.io/${{ env.REPO_OWNER }}/litespeed:${{ env.VERSION }}
+      
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/terraform-aws] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/terraform-aws-v')
+        uses: docker/build-push-action@v3
+        env:
+          DOCKER_CONTENT_TRUST: 1
+        with:
+          context: ./terraform/aws
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/terraform-aws:latest,ghcr.io/${{ env.REPO_OWNER }}/terraform-aws:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/terraform-gcp-v')
+        uses: docker/build-push-action@v3
+        env:
+          DOCKER_CONTENT_TRUST: 1
+        with:
+          context: ./terraform/gcp
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:latest,ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:${{ env.VERSION }}
