@@ -3,13 +3,9 @@
 ### Proxy
 * [Squid 5.7](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
 
-### SDK
-* [AWS](/sdk/aws/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
-* [GCP](/sdk/gcp/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
-
 ### Terrafrom
-* [AWS](/terraform/aws/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
-* [GCP](/terraform/gcp/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
+* [AWS](/terraform/aws/) - [ghcr.io/tier940/terraform-aws:latest](https://github.com/tier940/docker-repo/pkgs/container/terraform-aws)
+* [GCP](/terraform/gcp/) - [ghcr.io/tier940/terraform-gcp:latest](https://github.com/tier940/docker-repo/pkgs/container/terraform-gcp)
 
 ### Web
 * [Airflow 2](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
