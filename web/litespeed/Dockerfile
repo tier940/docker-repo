@@ -1,4 +1,4 @@
-FROM docker.io/ubuntu:20.04
+FROM docker.io/ubuntu:20.10
 
 # Init
 ENV TZ=Asia/Tokyo
