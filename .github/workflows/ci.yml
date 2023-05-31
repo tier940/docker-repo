@@ -34,7 +34,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/squid-v')
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
@@ -45,7 +45,7 @@ jobs:
 
       - name: "[ghcr.io/[${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
@@ -56,7 +56,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/litespeed-v')
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
@@ -67,7 +67,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfaws] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/tfaws-v')
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
@@ -78,7 +78,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfgcp] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/tfgcp-v')
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         env:
           DOCKER_CONTENT_TRUST: 1
         with:
