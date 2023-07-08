@@ -7,7 +7,7 @@ ARG UID=1000
 ARG GID=1000
 ARG AWS_VAULT_VERSION="7.2.0"
 ARG TFSEC_VERSION="1.28.1"
-ARG TFLINT_VERSION="0.46.1"
+ARG TFLINT_VERSION="0.47.0"
 
 RUN yum install -y shadow-utils tzdata git tar unzip > /dev/null \
     && yum clean all -y > /dev/null \

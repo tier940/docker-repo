@@ -1,9 +1,9 @@
-FROM docker.io/alpine:edge
+FROM --platform=$BUILDPLATFORM docker.io/alpine:edge
 
 # Squid install
 ENV TZ=Asia/Tokyo
 RUN apk update \
-  && apk add --no-cache squid~=5.7-r0
+  && apk add --no-cache squid~=6.1-r0
 
 COPY squid.conf /etc/squid/
 COPY lxc-whitelist /etc/squid/whitelist

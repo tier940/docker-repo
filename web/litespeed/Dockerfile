@@ -1,9 +1,9 @@
-FROM docker.io/ubuntu:20.04
+FROM --platform=$BUILDPLATFORM docker.io/ubuntu:22.04
 
 # Init
 ENV TZ=Asia/Tokyo
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PHP_VERSION=lsphp81
+ENV PHP_VERSION=lsphp82
 
 
 # Install package

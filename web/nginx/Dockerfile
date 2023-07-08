@@ -1,4 +1,4 @@
-FROM docker.io/nginx:stable-alpine
+FROM --platform=$BUILDPLATFORM docker.io/nginx:stable-alpine
 
 # Nginx setup
 COPY ./nginx.conf /etc/nginx/
