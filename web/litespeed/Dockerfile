@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/ubuntu:22.04
+FROM --platform=$BUILDPLATFORM docker.io/ubuntu:23.10
 
 # Init
 ENV TZ=Asia/Tokyo
