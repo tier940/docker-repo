@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/amazon/aws-cli:2.11.26
+FROM --platform=$BUILDPLATFORM docker.io/amazon/aws-cli:2.13.0
 
 ARG TARGETOS TARGETARCH
 ARG USERNAME=user
