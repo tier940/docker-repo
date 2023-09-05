@@ -1,8 +1,8 @@
-FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.6.2-python3.10
+FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.7.0-python3.11
 
 # Setup Airflow
-ENV AIRFLOW_VERSION=2.6.2
-ENV PYTHON_VERSION=3.10
+ENV AIRFLOW_VERSION=2.7.0
+ENV PYTHON_VERSION=3.11
 
 COPY entrypoint.sh /entrypoint.sh
 RUN pip install "apache-airflow[crypto,celery,google,postgres]==${AIRFLOW_VERSION}"

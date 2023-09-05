@@ -12,6 +12,7 @@
 .amazon.com
 .amazon.co.jp
 .amazonaws.com
+.ecr.aws
 
 .microsoft.com
 .windows.com
@@ -42,3 +43,4 @@
 .atlassian.net
 .atlassian.com
 .notion.so
+.openai.com
