@@ -96,3 +96,16 @@ jobs:
           push: true
           provenance: false
           tags: ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:latest,ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:${{ env.VERSION }}
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Dockle Report
+          path: dockle-report.json
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: dockle-report.sarif
