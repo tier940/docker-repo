@@ -1,7 +1,6 @@
 FROM --platform=$BUILDPLATFORM docker.io/alpine:edge
 
 # Squid install
-ENV TZ=Asia/Tokyo
 RUN apk update \
   && apk add --no-cache squid~=6.3-r0
 

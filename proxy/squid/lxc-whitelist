@@ -1,7 +1,6 @@
 .cloudflare-dns.com
 
 .google.com
-.google.co.jp
 .googleapis.com
 .googletagmanager.com
 .google-analytics.com
@@ -10,7 +9,6 @@
 .gcr.io
 
 .amazon.com
-.amazon.co.jp
 .amazonaws.com
 .ecr.aws
 
