@@ -4,6 +4,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    entrypoint: ['/usr/sbin/squid']
+    command: ["-N", "-f", "/etc/squid/squid.conf"]
+    container_name: squid
+    tty: true
     ports:
       - "3128:3128"
     volumes:
