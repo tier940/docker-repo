@@ -3,6 +3,9 @@
 ### Proxy
 * [Squid 6.3(amd64 & aarch64)](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
 
+### Ansible(systemd)
+* [Ansible(amd64 & aarch64)](/ansible/rockylinux/) - [ghcr.io/tier940/ansible-rockylinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-rockylinux)
+
 ### Terrafrom
 * [AWS(amd64 & aarch64)](/terraform/aws/) - [ghcr.io/tier940/terraform-aws:latest](https://github.com/tier940/docker-repo/pkgs/container/terraform-aws)
 * [GCP(amd64 & aarch64)](/terraform/gcp/) - [ghcr.io/tier940/terraform-gcp:latest](https://github.com/tier940/docker-repo/pkgs/container/terraform-gcp)
