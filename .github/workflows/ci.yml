@@ -6,6 +6,7 @@ on:
       - squid-v*
       - airflow2-v*
       - litespeed-v*
+      - ansible-rockylinux-*
       - tfaws-v*
       - tfgcp-v*
 
@@ -46,7 +47,7 @@ jobs:
           tags: ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:latest,ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ env.VERSION }}
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux] Push image to GitHub Container Registry"
-        if: contains(github.ref, 'tags/squid-v')
+        if: contains(github.ref, 'tags/ansible-rockylinux-v')
         uses: docker/build-push-action@v5
         env:
           DOCKER_CONTENT_TRUST: 1
