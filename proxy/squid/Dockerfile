@@ -1,5 +1,8 @@
 FROM --platform=$BUILDPLATFORM docker.io/alpine:edge
 
+ARG TARGETOS TARGETARCH
+LABEL maintainer="tier940"
+
 # Squid install
 RUN apk update \
   && apk add --no-cache squid~=6.3-r0

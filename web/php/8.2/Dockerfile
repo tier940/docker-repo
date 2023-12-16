@@ -1,4 +1,8 @@
 FROM --platform=$BUILDPLATFORM docker.io/php:8.2-fpm
+
+ARG TARGETOS TARGETARCH
+LABEL maintainer="tier940"
+
 RUN adduser nginx
 
 # App install

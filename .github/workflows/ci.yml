@@ -6,7 +6,8 @@ on:
       - squid-v*
       - airflow2-v*
       - litespeed-v*
-      - ansible-rockylinux-*
+      - ansible-almalinux-v*
+      - ansible-rockylinux-v*
       - tfaws-v*
       - tfgcp-v*
 
@@ -58,6 +59,19 @@ jobs:
           push: true
           provenance: false
           tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/ansible-almalinux-v')
+        uses: docker/build-push-action@v5
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./ansible/almalinux
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux:${{ env.VERSION }}
 
       - name: "[ghcr.io/[${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')

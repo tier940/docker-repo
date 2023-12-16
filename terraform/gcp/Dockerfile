@@ -3,6 +3,7 @@ FROM --platform=$BUILDPLATFORM docker.io/google/cloud-sdk:alpine
 ARG TARGETOS TARGETARCH
 ARG TFSEC_VERSION="1.28.4"
 ARG TFLINT_VERSION="0.49.0"
+LABEL maintainer="tier940"
 
 RUN apk add curl bash git unzip \
     && rm -Rf /var/cache/apk/* \

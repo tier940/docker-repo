@@ -1,5 +1,8 @@
 FROM --platform=$BUILDPLATFORM docker.io/ubuntu:22.04
 
+ARG TARGETOS TARGETARCH
+LABEL maintainer="tier940"
+
 # Init
 ENV TZ=Asia/Tokyo
 ENV DEBIAN_FRONTEND=noninteractive

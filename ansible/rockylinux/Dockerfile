@@ -1,7 +1,8 @@
-FROM --platform=$BUILDPLATFORM docker.io/rockylinux:9.2
+FROM --platform=$BUILDPLATFORM docker.io/rockylinux:9.3
 
 ARG TARGETOS TARGETARCH
 ENV container docker
+LABEL maintainer="tier940"
 
 RUN [ ! -f /usr/sbin/init ] \
     && dnf install -y epel-release tzdata git tar unzip systemd > /dev/null \
@@ -17,5 +18,6 @@ RUN [ ! -f /usr/sbin/init ] \
         rm -f /lib/systemd/system/basic.target.wants/*; \
         rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+WORKDIR /root/work
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]

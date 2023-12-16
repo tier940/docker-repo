@@ -1,5 +1,8 @@
 FROM --platform=$BUILDPLATFORM docker.io/nginx:alpine3.18-slim
 
+ARG TARGETOS TARGETARCH
+LABEL maintainer="tier940"
+
 # Nginx setup
 COPY ./nginx.conf /etc/nginx/
 COPY ./conf.d/default.conf /etc/nginx/conf.d/
