@@ -1,7 +1,7 @@
 # tier940/docker-repo
 ## Docker List
 ### Proxy
-* [Squid 6.3(amd64 & aarch64)](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
+* [Squid 6.6(amd64 & aarch64)](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
 
 ### Ansible(systemd)
 * [AlmaLinux OS (amd64 & aarch64)](/ansible/almalinux/) - [ghcr.io/tier940/ansible-almalinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-almalinux)
@@ -15,5 +15,5 @@
 * [Airflow 2.7.3(amd64 & aarch64)](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
 * [LiteSpeed(amd64 & aarch64)](/web/litespeed/) - [ghcr.io/tier940/litespeed:latest](https://github.com/tier940/docker-repo/pkgs/container/litespeed)
 * [Nginx](/web/nginx/) - [ghcr.io/tier940/nginx:latest](https://github.com/tier940/docker-repo/pkgs/container/nginx)
-* [PHP 8.0](/web/php/8.0/) - [ghcr.io/tier940/php-8.0:latest](https://github.com/tier940/docker-repo/pkgs/container/php-8.0)
-* [PHP 8.2](/web/php/8.2/) - [ghcr.io/tier940/php-8.2:latest](https://github.com/tier940/docker-repo/pkgs/container/php-8.2)
+* [PHP 8.0](/web/php/8.0/) - [ghcr.io/tier940/php-80:latest](https://github.com/tier940/docker-repo/pkgs/container/php-80)
+* [PHP 8.2](/web/php/8.2/) - [ghcr.io/tier940/php-82:latest](https://github.com/tier940/docker-repo/pkgs/container/php-82)
