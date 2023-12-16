@@ -112,7 +112,7 @@ jobs:
           tags: ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:latest,ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:${{ env.VERSION }}
 
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Dockle Report
