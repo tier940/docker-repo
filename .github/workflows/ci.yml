@@ -152,7 +152,7 @@ jobs:
           context: ./web/php/8.0
           push: true
           provenance: false
-          tags: ghcr.io/${{ env.REPO_OWNER }}/php-8.0:latest,ghcr.io/${{ env.REPO_OWNER }}/php-8.0:${{ env.VERSION }}
+          tags: ghcr.io/${{ env.REPO_OWNER }}/php-80:latest,ghcr.io/${{ env.REPO_OWNER }}/php-80:${{ env.VERSION }}
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/php-8.2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/php-8.2-v')
@@ -165,7 +165,7 @@ jobs:
           context: ./web/php/8.2
           push: true
           provenance: false
-          tags: ghcr.io/${{ env.REPO_OWNER }}/php-8.2:latest,ghcr.io/${{ env.REPO_OWNER }}/php-8.2:${{ env.VERSION }}
+          tags: ghcr.io/${{ env.REPO_OWNER }}/php-82:latest,ghcr.io/${{ env.REPO_OWNER }}/php-82:${{ env.VERSION }}
 
       - name: Upload Report
         uses: actions/upload-artifact@v4
