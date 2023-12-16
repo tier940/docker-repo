@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/php:8.0-fpm
+FROM --platform=$BUILDPLATFORM docker.io/php:8.3-fpm
 
 ARG TARGETOS TARGETARCH
 LABEL maintainer="tier940"
