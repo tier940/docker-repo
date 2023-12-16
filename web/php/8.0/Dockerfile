@@ -32,7 +32,7 @@ ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 
 # PHP Setup
-COPY ./php/php.ini-dev /usr/local/etc/php/php.ini
+COPY ./php/php.ini /usr/local/etc/php/php.ini
 COPY ./php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
 
 RUN mkdir -p /var/run/php-fpm/ \
