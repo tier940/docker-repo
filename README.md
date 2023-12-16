@@ -4,8 +4,8 @@
 * [Squid 6.3(amd64 & aarch64)](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
 
 ### Ansible(systemd)
-* [Ansible(amd64 & aarch64)](/ansible/almalinux/) - [ghcr.io/tier940/ansible-almalinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-almalinux)
-* [Ansible(amd64 & aarch64)](/ansible/rockylinux/) - [ghcr.io/tier940/ansible-rockylinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-rockylinux)
+* [AlmaLinux OS (amd64 & aarch64)](/ansible/almalinux/) - [ghcr.io/tier940/ansible-almalinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-almalinux)
+* [Rocky Linux (amd64 & aarch64)](/ansible/rockylinux/) - [ghcr.io/tier940/ansible-rockylinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-rockylinux)
 
 ### Terrafrom
 * [AWS(amd64 & aarch64)](/terraform/aws/) - [ghcr.io/tier940/terraform-aws:latest](https://github.com/tier940/docker-repo/pkgs/container/terraform-aws)
@@ -14,6 +14,6 @@
 ### Web
 * [Airflow 2.7.3(amd64 & aarch64)](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
 * [LiteSpeed(amd64 & aarch64)](/web/litespeed/) - [ghcr.io/tier940/litespeed:latest](https://github.com/tier940/docker-repo/pkgs/container/litespeed)
-* [Nginx](/web/nginx/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
-* [PHP 8.0](/web/php/8.0/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
-* [PHP 8.2](/web/php/8.2/) - [coming soon](https://github.com/tier940/docker-repo/pkgs/container/)
+* [Nginx](/web/nginx/) - [ghcr.io/tier940/nginx:latest](https://github.com/tier940/docker-repo/pkgs/container/nginx)
+* [PHP 8.0](/web/php/8.0/) - [ghcr.io/tier940/php-8.0:latest](https://github.com/tier940/docker-repo/pkgs/container/php-8.0)
+* [PHP 8.2](/web/php/8.2/) - [ghcr.io/tier940/php-8.2:latest](https://github.com/tier940/docker-repo/pkgs/container/php-8.2)
