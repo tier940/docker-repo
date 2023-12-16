@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.13.19
+FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.15.2
 
 ARG TARGETOS TARGETARCH
 ARG USERNAME=user
@@ -6,8 +6,8 @@ ARG GROUPNAME=user
 ARG UID=1000
 ARG GID=1000
 ARG AWS_VAULT_VERSION="7.2.0"
-ARG TFSEC_VERSION="1.28.1"
-ARG TFLINT_VERSION="0.48.0"
+ARG TFSEC_VERSION="1.28.4"
+ARG TFLINT_VERSION="0.49.0"
 
 RUN yum install -y shadow-utils tzdata git tar unzip > /dev/null \
     && yum clean all -y > /dev/null \
