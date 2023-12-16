@@ -8,7 +8,7 @@ RUN adduser nginx
 # App install
 ENV DEBCONF_NOWARNINGS=yes
 RUN apt update \
-    && apt install -y unzip libzip-dev mariadb-client wget git libpq-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    && apt install -y ca-certificates curl gnupg unzip libzip-dev mariadb-client wget git libpq-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     && pecl install curl xdebug \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd mysqli pdo_mysql opcache zip \
@@ -16,7 +16,10 @@ RUN apt update \
 
 # Node install
 ENV NODE_VERSION=20
-RUN curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash -  \
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
+    && apt update \
     && apt install -y nodejs \
     && apt -y autoremove \
     && apt clean \

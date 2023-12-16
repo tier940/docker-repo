@@ -15,5 +15,5 @@
 * [Airflow 2.7.3(amd64 & aarch64)](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
 * [LiteSpeed(amd64 & aarch64)](/web/litespeed/) - [ghcr.io/tier940/litespeed:latest](https://github.com/tier940/docker-repo/pkgs/container/litespeed)
 * [Nginx](/web/nginx/) - [ghcr.io/tier940/nginx:latest](https://github.com/tier940/docker-repo/pkgs/container/nginx)
-* [PHP 8.0](/web/php/8.0/) - [ghcr.io/tier940/php-80:latest](https://github.com/tier940/docker-repo/pkgs/container/php-80)
-* [PHP 8.2](/web/php/8.2/) - [ghcr.io/tier940/php-82:latest](https://github.com/tier940/docker-repo/pkgs/container/php-82)
+* [PHP 8.0](/web/php/8.0/) - [ghcr.io/tier940/php80:latest](https://github.com/tier940/docker-repo/pkgs/container/php80)
+* [PHP 8.2](/web/php/8.2/) - [ghcr.io/tier940/php82:latest](https://github.com/tier940/docker-repo/pkgs/container/php82)

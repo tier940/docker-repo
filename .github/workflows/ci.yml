@@ -11,8 +11,8 @@ on:
       - tfaws-v*
       - tfgcp-v*
       - nginx-v*
-      - php-8.0-v*
-      - php-8.2-v*
+      - php80-v*
+      - php82-v*
 
 jobs:
   build:
@@ -141,8 +141,8 @@ jobs:
           provenance: false
           tags: ghcr.io/${{ env.REPO_OWNER }}/nginx:latest,ghcr.io/${{ env.REPO_OWNER }}/nginx:${{ env.VERSION }}
 
-      - name: "[ghcr.io/${{ env.REPO_OWNER }}/php-8.0] Push image to GitHub Container Registry"
-        if: contains(github.ref, 'tags/php-8.0-v')
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/php8.0] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/php80-v')
         uses: docker/build-push-action@v5
         env:
           DOCKER_CONTENT_TRUST: 1
@@ -152,10 +152,10 @@ jobs:
           context: ./web/php/8.0
           push: true
           provenance: false
-          tags: ghcr.io/${{ env.REPO_OWNER }}/php-80:latest,ghcr.io/${{ env.REPO_OWNER }}/php-80:${{ env.VERSION }}
+          tags: ghcr.io/${{ env.REPO_OWNER }}/php80:latest,ghcr.io/${{ env.REPO_OWNER }}/php80:${{ env.VERSION }}
 
-      - name: "[ghcr.io/${{ env.REPO_OWNER }}/php-8.2] Push image to GitHub Container Registry"
-        if: contains(github.ref, 'tags/php-8.2-v')
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/php8.2] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/php82-v')
         uses: docker/build-push-action@v5
         env:
           DOCKER_CONTENT_TRUST: 1
@@ -165,7 +165,7 @@ jobs:
           context: ./web/php/8.2
           push: true
           provenance: false
-          tags: ghcr.io/${{ env.REPO_OWNER }}/php-82:latest,ghcr.io/${{ env.REPO_OWNER }}/php-82:${{ env.VERSION }}
+          tags: ghcr.io/${{ env.REPO_OWNER }}/php82:latest,ghcr.io/${{ env.REPO_OWNER }}/php82:${{ env.VERSION }}
 
       - name: Upload Report
         uses: actions/upload-artifact@v4
