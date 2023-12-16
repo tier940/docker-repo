@@ -1,4 +1,4 @@
-#	WELCOME TO SQUID 6.3
+#	WELCOME TO SQUID 6.6
 #	----------------------------
 #
 #	This is the documentation for the Squid configuration file.
@@ -6058,20 +6058,26 @@ refresh_pattern .		0	20%	4320
 # -----------------------------------------------------------------------------
 
 #  TAG: request_header_max_size	(KB)
-#	This specifies the maximum size for HTTP headers in a request.
-#	Request headers are usually relatively small (about 512 bytes).
-#	Placing a limit on the request header size will catch certain
-#	bugs (for example with persistent connections) and possibly
-#	buffer-overflow or denial-of-service attacks.
+#	This directives limits the header size of a received HTTP request
+#	(including request-line). Increasing this limit beyond its 64 KB default
+#	exposes certain old Squid code to various denial-of-service attacks. This
+#	limit also applies to received FTP commands.
+#
+#	This limit has no direct affect on Squid memory consumption.
+#
+#	Squid does not check this limit when sending requests.
 #Default:
 # request_header_max_size 64 KB
 
 #  TAG: reply_header_max_size	(KB)
-#	This specifies the maximum size for HTTP headers in a reply.
-#	Reply headers are usually relatively small (about 512 bytes).
-#	Placing a limit on the reply header size will catch certain
-#	bugs (for example with persistent connections) and possibly
-#	buffer-overflow or denial-of-service attacks.
+#	This directives limits the header size of a received HTTP response
+#	(including status-line). Increasing this limit beyond its 64 KB default
+#	exposes certain old Squid code to various denial-of-service attacks. This
+#	limit also applies to FTP command responses.
+#
+#	Squid also checks this limit when loading hit responses from disk cache.
+#
+#	Squid does not check this limit when sending responses.
 #Default:
 # reply_header_max_size 64 KB
 

@@ -5,7 +5,7 @@ LABEL maintainer="tier940"
 
 # Squid install
 RUN apk update \
-  && apk add --no-cache squid~=6.3-r0
+  && apk add --no-cache squid~=6.6-r0
 
 # COPY squid-ssl-bump.conf /etc/squid/squid.conf
 COPY squid.conf /etc/squid/
