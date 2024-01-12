@@ -1,7 +1,7 @@
 FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.8.0-python3.11
 
 # Setup Airflow
-ENV AIRFLOW_VERSION=2.7.3
+ENV AIRFLOW_VERSION=2.8.0
 ENV PYTHON_VERSION=3.11
 
 COPY entrypoint.sh /entrypoint.sh
