@@ -12,7 +12,7 @@
 * [GCP(amd64 & aarch64)](/terraform/gcp/) - [ghcr.io/tier940/terraform-gcp:latest](https://github.com/tier940/docker-repo/pkgs/container/terraform-gcp)
 
 ### Web
-* [Airflow 2.7.3(amd64 & aarch64)](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
+* [Airflow 2.8.0(amd64 & aarch64)](/web/airflow/) - [ghcr.io/tier940/airflow2:latest](https://github.com/tier940/docker-repo/pkgs/container/airflow2)
 * [LiteSpeed(amd64 & aarch64)](/web/litespeed/) - [ghcr.io/tier940/litespeed:latest](https://github.com/tier940/docker-repo/pkgs/container/litespeed)
 * [Nginx](/web/nginx/) - [ghcr.io/tier940/nginx:latest](https://github.com/tier940/docker-repo/pkgs/container/nginx)
 * [PHP 8.0](/web/php/8.0/) - [ghcr.io/tier940/php80:latest](https://github.com/tier940/docker-repo/pkgs/container/php80)
