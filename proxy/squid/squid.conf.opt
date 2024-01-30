@@ -31,10 +31,10 @@ acl CONNECT method CONNECT
 # Recommended minimum Access Permission configuration:
 #
 # Deny requests to certain unsafe ports
-http_access deny !Safe_ports
+# http_access deny !Safe_ports
 
 # Deny CONNECT to other than secure SSL ports
-http_access deny CONNECT !SSL_ports
+# http_access deny CONNECT !SSL_ports
 
 # Only allow cachemgr access from localhost
 http_access allow localhost manager
@@ -89,7 +89,7 @@ httpd_suppress_version_string on
 visible_hostname unknown
 logfile_rotate 0
 logformat timefm "%{%Y/%m/%d %H:%M:%S}tl.%03tu" %>a %>st %<a %<st %>rP %mt "%rm %>ru HTTP/%rv" %>Hs "%{Referer}>h" "%{User-Agent}>h" "%Ss:%Sh"
-access_log stdio:/dev/stdout timefm
+access_log /var/log/squid/access.log timefm
 cache_log stdio:/dev/stdout
 
 cache_mem 0 MB

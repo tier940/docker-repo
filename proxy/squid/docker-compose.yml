@@ -7,10 +7,11 @@ services:
     entrypoint: ['/usr/sbin/squid']
     command: ["-N", "-f", "/etc/squid/squid.conf"]
     container_name: squid
+    restart: unless-stopped
+    privileged: true
     tty: true
     ports:
       - "3128:3128"
     volumes:
       - ./squid.conf:/etc/squid/squid.conf
       - ./lxc-whitelist:/etc/squid/whitelist
-    restart: always

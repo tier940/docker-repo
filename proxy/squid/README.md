@@ -1,7 +1,13 @@
 ## normal usage
+### One line command
+- `cp -r ./squid.conf.opt ./squid.conf`
 - `docker compose build; docker run --name squid -d --net=host squid-lxc:latest`
-- or
+
+### docker compose
+- `cp -r ./squid.conf.opt ./squid.conf`
 - `docker compose up -d`
+
+
 
 ## ssl-bump
 ### 1. generate cert
