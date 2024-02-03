@@ -19,5 +19,5 @@ RUN [ ! -f /usr/sbin/init ] \
         rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 WORKDIR /root/work
-VOLUME [ "/sys/fs/cgroup" ]
+VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/sbin/init"]

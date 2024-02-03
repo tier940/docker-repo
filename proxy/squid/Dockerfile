@@ -26,5 +26,6 @@ COPY lxc-whitelist /etc/squid/whitelist
 # Finalize
 EXPOSE 3128
 USER squid
+WORKDIR /etc/squid/
 ENTRYPOINT [ "/usr/sbin/squid" ]
 CMD [ "-N", "-f", "/etc/squid/squid.conf" ]

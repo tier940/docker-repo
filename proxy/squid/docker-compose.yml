@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 services:
   lxc:
     build:
@@ -15,3 +15,4 @@ services:
     volumes:
       - ./squid.conf:/etc/squid/squid.conf
       - ./lxc-whitelist:/etc/squid/whitelist
+      - ./logs:/var/log/squid

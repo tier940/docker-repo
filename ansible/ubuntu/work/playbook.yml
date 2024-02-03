@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  become : true
+  tasks:
+    - name: cat /etc/os-release
+      shell: cat /etc/os-release
+      register: os_release

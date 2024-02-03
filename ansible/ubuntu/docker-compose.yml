@@ -1,12 +1,11 @@
 version: "3.9"
 services:
-  almalinux:
+  ubuntu:
     build:
       context: .
       dockerfile: Dockerfile
     privileged: true
-    container_name: almalinux
+    container_name: ubuntu
     tty: true
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - ./work:/root/work

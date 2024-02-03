@@ -1,14 +1,17 @@
-FROM --platform=$BUILDPLATFORM docker.io/almalinux:9.3
+FROM --platform=$BUILDPLATFORM docker.io/ubuntu:24.04
 
+ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETOS TARGETARCH
 ENV container docker
 LABEL maintainer="tier940"
 
-RUN [ ! -f /usr/sbin/init ] \
-    && dnf install -y epel-release tzdata git tar unzip systemd > /dev/null \
-    && dnf install -y ansible > /dev/null \
-    && yum clean all -y > /dev/null \
-    && echo 'export PS1="\e[0;32m\u@\h\e[1;37m:\e[0;34m\w\e[1;37m$ "' >> ~/.bashrc \
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends \ 
+        software-properties-common gpg-agent systemd systemd-cron \
+    && apt-add-repository --yes --update ppa:ansible/ansible \
+    && apt-get install -y --no-install-recommends ansible \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
         rm -f /lib/systemd/system/multi-user.target.wants/*; \
         rm -f /etc/systemd/system/*.wants/*; \
@@ -19,5 +22,5 @@ RUN [ ! -f /usr/sbin/init ] \
         rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 WORKDIR /root/work
-VOLUME ["/sys/fs/cgroup"]
-CMD ["/usr/sbin/init"]
+VOLUME ["/tmp", "/run", "/run/lock"]
+CMD ["/lib/systemd/systemd"]

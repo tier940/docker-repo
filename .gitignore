@@ -1,1 +1,3 @@
 proxy/squid/squid.conf
+proxy/squid/logs/*
+!proxy/squid/logs/.gitkeep

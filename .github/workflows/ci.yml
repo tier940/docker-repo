@@ -8,6 +8,7 @@ on:
       - litespeed-v*
       - ansible-almalinux-v*
       - ansible-rockylinux-v*
+      - ansible-ubuntu-v*
       - tfaws-v*
       - tfgcp-v*
       - nginx-v*
@@ -35,7 +36,9 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo VERSION=$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}') >> $GITHUB_ENV
+        run: |
+          VERSION=$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/squid-v')
@@ -76,6 +79,19 @@ jobs:
           provenance: false
           tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux:${{ env.VERSION }}
 
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/ansible-ubuntu-v')
+        uses: docker/build-push-action@v5
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./ansible/almalinux
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu:${{ env.VERSION }}
+      
       - name: "[ghcr.io/[${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')
         uses: docker/build-push-action@v5
