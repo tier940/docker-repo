@@ -37,7 +37,7 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          VERSION=$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $2}')
+          VERSION=$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $NF}')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
