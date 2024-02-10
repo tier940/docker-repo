@@ -5,6 +5,7 @@
 # Example rule allowing access from your local networks.
 # Adapt to list your (internal) IP networks from where browsing
 # should be allowed
+acl localhost src 127.0.0.1/32 ::1      # localhost's IP address
 acl localnet src 0.0.0.1-0.255.255.255  # RFC 1122 "this" network (LAN)
 acl localnet src 10.0.0.0/8             # RFC 1918 local private network (LAN)
 acl localnet src 100.64.0.0/10          # RFC 6598 shared address space (CGN)
@@ -25,16 +26,15 @@ acl Safe_ports port 280         # http-mgmt
 acl Safe_ports port 488         # gss-http
 acl Safe_ports port 591         # filemaker
 acl Safe_ports port 777         # multiling http
-acl CONNECT method CONNECT
 
 #
 # Recommended minimum Access Permission configuration:
 #
 # Deny requests to certain unsafe ports
-# http_access deny !Safe_ports
+http_access deny !Safe_ports
 
 # Deny CONNECT to other than secure SSL ports
-# http_access deny CONNECT !SSL_ports
+http_access deny CONNECT !SSL_ports
 
 # Only allow cachemgr access from localhost
 http_access allow localhost manager
@@ -64,8 +64,6 @@ http_access deny to_linklocal
 # For example, to allow access from your local networks, you may uncomment the
 # following rule (and/or add rules that match your definition of "local"):
 http_access allow localnet
-acl whitelist dstdomain "/etc/squid/whitelist"
-http_access allow whitelist
 
 # And finally deny all other access to this proxy
 http_access deny all
@@ -75,6 +73,7 @@ no_cache deny all
 udp_incoming_address 0.0.0.0
 tcp_outgoing_address 0.0.0.0
 http_port 3128
+dns_nameservers 1.1.1.1 1.0.0.1
 icp_port 0
 
 # request_header_add X-GoogApps-Allowed-Domains xxx.com to_google
@@ -89,11 +88,14 @@ httpd_suppress_version_string on
 visible_hostname unknown
 logfile_rotate 0
 logformat timefm "%{%Y/%m/%d %H:%M:%S}tl.%03tu" %>a %>st %<a %<st %>rP %mt "%rm %>ru HTTP/%rv" %>Hs "%{Referer}>h" "%{User-Agent}>h" "%Ss:%Sh"
-access_log /var/log/squid/access.log timefm
+access_log stdio:/dev/stdout timefm
 cache_log stdio:/dev/stdout
 
 cache_mem 0 MB
 cache_store_log none
+cache deny all
+cache_dir null /tmp
+maximum_object_size 0 KB
 
 client_persistent_connections off
 server_persistent_connections off
