@@ -1,7 +1,7 @@
 # tier940/docker-repo
 ## Docker List
 ### Proxy
-* [Squid 6.6(amd64 & aarch64)](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
+* [Squid 6.7(amd64 & aarch64)](/proxy/squid/) - [ghcr.io/tier940/squid-lxc:latest](https://github.com/tier940/docker-repo/pkgs/container/squid-lxc)
 
 ### Ansible(systemd)
 * [AlmaLinux OS (amd64 & aarch64)](/ansible/almalinux/) - [ghcr.io/tier940/ansible-almalinux:latest](https://github.com/tier940/docker-repo/pkgs/container/ansible-almalinux)
