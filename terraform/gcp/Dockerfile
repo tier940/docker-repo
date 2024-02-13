@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:462.0.1-alpine
+FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:464.0.0-alpine
 
 ARG TARGETOS TARGETARCH
 ARG TFSEC_VERSION="1.28.5"
