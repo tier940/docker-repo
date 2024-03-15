@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.15.17
+FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.15.30
 
 ARG TARGETOS TARGETARCH
 ARG USERNAME=user
