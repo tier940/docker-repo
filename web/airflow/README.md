@@ -1,7 +1,7 @@
 # Docker Airflow2
 ## Informations
 
-* Based on official Airflow 2 Image [apache/airflow:2.8.1-python3.11](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
+* Based on official Airflow 2 Image [apache/airflow:2.8.3-python3.11](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
 * Docker entrypoint script is forked from [dataops-sre/docker-airflow2](https://github.com/dataops-sre/docker-airflow2)
 * Install [Docker](https://www.docker.com/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
