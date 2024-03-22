@@ -20,7 +20,7 @@ export \
 
 # Install custom python package if requirements.txt is present
 if [ -e "/opt/airflow/requirements.txt" ]; then
-  $(command -v pip) install --user -r /opt/airflow/requirements.txt
+  $(command -v uv) pip install --user -r /opt/airflow/requirements.txt
 fi
 
 wait_for_port() {
