@@ -1,8 +1,8 @@
-FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.9.2-python3.11
+FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.9.2-python3.12
 
 # Setup Airflow
-ENV AIRFLOW_VERSION=2.8.3
-ENV PYTHON_VERSION=3.11
+ENV AIRFLOW_VERSION=2.9.2
+ENV PYTHON_VERSION=3.12
 COPY webserver_config.py $AIRFLOW_HOME/
 COPY dags $AIRFLOW_HOME/dags
 RUN pip install uv \
