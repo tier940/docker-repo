@@ -45,7 +45,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/squid-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -58,7 +58,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/ansible-rockylinux-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -71,7 +71,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/ansible-almalinux-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -84,7 +84,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/ansible-ubuntu-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -97,7 +97,7 @@ jobs:
       
       - name: "[ghcr.io/[${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/airflow2-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -110,7 +110,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/litespeed-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -123,7 +123,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfaws] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/tfaws-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -136,7 +136,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfgcp] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/tfgcp-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -149,7 +149,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/nginx] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/nginx-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -162,7 +162,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/php8.0] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/php80-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
@@ -175,7 +175,7 @@ jobs:
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/php8.2] Push image to GitHub Container Registry"
         if: contains(github.ref, 'tags/php82-v')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           DOCKER_CONTENT_TRUST: 1
           BUILDKIT_MULTI_PLATFORM: 1
