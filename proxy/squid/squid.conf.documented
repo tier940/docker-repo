@@ -1,4 +1,4 @@
-#	WELCOME TO SQUID 6.7
+#	WELCOME TO SQUID 6.9
 #	----------------------------
 #
 #	This is the documentation for the Squid configuration file.
@@ -9210,7 +9210,7 @@ refresh_pattern .		0	20%	4320
 #  TAG: http_upgrade_request_protocols
 #	Controls client-initiated and server-confirmed switching from HTTP to
 #	another protocol (or to several protocols) using HTTP Upgrade mechanism
-#	defined in RFC 7230 Section 6.7. Squid itself does not understand the
+#	defined in RFC 7230 Section 6.9. Squid itself does not understand the
 #	protocols being upgraded to and participates in the upgraded
 #	communication only as a dumb TCP proxy. Admins should not allow
 #	upgrading to protocols that require a more meaningful proxy
