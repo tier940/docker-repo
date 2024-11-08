@@ -1,11 +1,11 @@
 version: "3.9"
 services:
   redis:
-    image: 'redis:7'
+    image: 'redis:8'
     # command: redis-server --requirepass redispass
 
   postgres:
-    image: postgres:15
+    image: postgres:17
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow

@@ -1,7 +1,7 @@
 FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.10.3-python3.12
 
 # Setup Airflow
-ENV AIRFLOW_VERSION=2.9.3
+ENV AIRFLOW_VERSION=2.10.3
 ENV PYTHON_VERSION=3.12
 COPY webserver_config.py $AIRFLOW_HOME/
 COPY dags $AIRFLOW_HOME/dags
