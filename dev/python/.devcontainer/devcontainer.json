@@ -1,0 +1,36 @@
+{
+    "name": "python",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+      "ghcr.io/devcontainers/features/python:1.6.5": {
+        "version": "3.12"
+      }
+    },
+    "runArgs": [
+      "--name=python",
+      "--network=host"
+    ],
+    "mounts":[
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+    "overrideCommand": true,
+    "shutdownAction": "stopContainer",
+    "customizations": {
+      "git.path": "/usr/local/bin/git",
+      "vscode": {
+        "workbench.editor.wrapTabs": true,
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.formatOnSave": true,
+        "files.autoSave": "afterDelay",
+        "files.watcherExclude": {
+          "**/.git/objects/**": true,
+          "**/.git/subtree-cache/**": true
+        },
+        "extensions.ignoreRecommendations": true,
+        "extensions": [
+          "ms-python.python"
+        ]
+      }
+    },
+    "postCreateCommand": "git config --global core.editor 'code --wait'"
+}
