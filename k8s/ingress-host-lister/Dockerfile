@@ -12,6 +12,7 @@ WORKDIR /app
 COPY --from=builder /app/main .
 RUN chmod +x main
 
+RUN apk add --no-cache ca-certificates
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
