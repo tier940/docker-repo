@@ -3,7 +3,18 @@ name: Build and Publish Docker
 on:
   push:
     tags:
-      - '*-v*'
+      - squid-v*
+      - airflow2-v*
+      - litespeed-v*
+      - ansible-almalinux-v*
+      - ansible-rockylinux-v*
+      - ansible-ubuntu-v*
+      - ingress-host-lister-v*
+      - tfaws-v*
+      - tfgcp-v*
+      - nginx-v*
+      - php80-v*
+      - php82-v*
 
 jobs:
   build:
@@ -30,43 +41,164 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          VERSION=$(echo "${GITHUB_REF}" | sed -e 's#refs/tags/##g' | awk -F'-' '{print $NF}')
+          VERSION=$(echo ${GITHUB_REF} | sed -e 's#refs/tags/##g' | awk -F'-' '{print $NF}')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Build and Push Docker Images
-        run: |
-          declare -A images=(
-            ["squid-v"]="proxy/squid:squid-lxc"
-            ["ansible-rockylinux-v"]="ansible/rockylinux:ansible-rockylinux"
-            ["ansible-almalinux-v"]="ansible/almalinux:ansible-almalinux"
-            ["ansible-ubuntu-v"]="ansible/ubuntu:ansible-ubuntu"
-            ["airflow2-v"]="web/airflow:airflow2"
-            ["litespeed-v"]="web/litespeed:litespeed"
-            ["ingress-host-lister-v"]="k8s/ingress-host-lister:ingress-host-lister"
-            ["tfaws-v"]="terraform/aws:terraform-aws"
-            ["tfgcp-v"]="terraform/gcp:terraform-gcp"
-            ["nginx-v"]="web/nginx:nginx"
-            ["php80-v"]="web/php/8.0:php80"
-            ["php82-v"]="web/php/8.2:php82"
-          )
-          
-          for tag_prefix in "${!images[@]}"; do
-            if [[ "${GITHUB_REF}" == *"${tag_prefix}"* ]]; then
-              context=$(echo "${images[$tag_prefix]}" | cut -d':' -f1)
-              image_name=$(echo "${images[$tag_prefix]}" | cut -d':' -f2)
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/squid-lxc] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/squid-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./proxy/squid
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:latest,ghcr.io/${{ env.REPO_OWNER }}/squid-lxc:${{ env.VERSION }}
 
-              echo "Building and pushing image: ghcr.io/${{ env.REPO_OWNER }}/${image_name}:${{ env.VERSION }}"
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/ansible-rockylinux-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./ansible/rockylinux
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-rockylinux:${{ env.VERSION }}
 
-              docker/build-push-action@v6 --env \
-                DOCKER_CONTENT_TRUST=1 \
-                BUILDKIT_MULTI_PLATFORM=1 \
-                platforms="linux/amd64,linux/arm64" \
-                context="./${context}" \
-                push=true \
-                provenance=false \
-                tags="ghcr.io/${{ env.REPO_OWNER }}/${image_name}:latest,ghcr.io/${{ env.REPO_OWNER }}/${image_name}:${{ env.VERSION }}"
-            fi
-          done
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/ansible-almalinux-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./ansible/almalinux
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-almalinux:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/ansible-ubuntu-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./ansible/almalinux
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu:latest,ghcr.io/${{ env.REPO_OWNER }}/ansible-ubuntu:${{ env.VERSION }}
+      
+      - name: "[ghcr.io/[${{ env.REPO_OWNER }}/airflow2] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/airflow2-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./web/airflow
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/airflow2:latest,ghcr.io/${{ env.REPO_OWNER }}/airflow2:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/litespeed] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/litespeed-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./web/litespeed
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/litespeed:latest,ghcr.io/${{ env.REPO_OWNER }}/litespeed:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/ingress-host-lister] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/ingress-host-lister-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./k8s/ingress-host-lister
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/ingress-host-lister:latest,ghcr.io/${{ env.REPO_OWNER }}/ingress-host-lister:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfaws] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/tfaws-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./terraform/aws
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/terraform-aws:latest,ghcr.io/${{ env.REPO_OWNER }}/terraform-aws:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfgcp] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/tfgcp-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./terraform/gcp
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:latest,ghcr.io/${{ env.REPO_OWNER }}/terraform-gcp:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/nginx] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/nginx-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./web/nginx
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/nginx:latest,ghcr.io/${{ env.REPO_OWNER }}/nginx:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/php8.0] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/php80-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./web/php/8.0
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/php80:latest,ghcr.io/${{ env.REPO_OWNER }}/php80:${{ env.VERSION }}
+
+      - name: "[ghcr.io/${{ env.REPO_OWNER }}/php8.2] Push image to GitHub Container Registry"
+        if: contains(github.ref, 'tags/php82-v')
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          BUILDKIT_MULTI_PLATFORM: 1
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ./web/php/8.2
+          push: true
+          provenance: false
+          tags: ghcr.io/${{ env.REPO_OWNER }}/php82:latest,ghcr.io/${{ env.REPO_OWNER }}/php82:${{ env.VERSION }}
 
       - name: Run Dockle Security Scan
         run: |
@@ -83,7 +215,7 @@ jobs:
             fi
           done
 
-      - name: Upload Dockle Report
+      - name: Upload Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
