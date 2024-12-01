@@ -2,7 +2,8 @@ FROM golang:1.23 AS builder
 
 WORKDIR /app
 COPY go.mod .
-RUN go mod download
+COPY go.sum .
+RUN go mod tidy
 COPY . .
 RUN go build -o main .
 
