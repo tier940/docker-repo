@@ -1,4 +1,4 @@
-module ingressHostLister
+module github.com/tier940/ingressHostLister
 
 go 1.23
 

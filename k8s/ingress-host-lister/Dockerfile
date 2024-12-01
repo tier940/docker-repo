@@ -5,10 +5,14 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod tidy
 COPY . .
-RUN go build -o main .
+RUN go build -v -o main .
 
 FROM alpine:latest
-WORKDIR /root/
+WORKDIR /app
 COPY --from=builder /app/main .
 RUN chmod +x main
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
 ENTRYPOINT ["./main"]
