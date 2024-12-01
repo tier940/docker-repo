@@ -133,6 +133,8 @@ jobs:
           context: ./k8s/ingress-host-lister
           push: true
           provenance: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: ghcr.io/${{ env.REPO_OWNER }}/ingress-host-lister:latest,ghcr.io/${{ env.REPO_OWNER }}/ingress-host-lister:${{ env.VERSION }}
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/tfaws] Push image to GitHub Container Registry"
