@@ -1,6 +1,6 @@
 # gcp
 ## command
 ```
-docker-compose up -d
-docker-compose exec terraform /bin/bash
+docker compose up -d
+docker compose exec terraform /bin/bash
 ```

@@ -1,7 +1,7 @@
 # Docker Airflow2
 ## Informations
 
-* Based on official Airflow 2 Image [apache/airflow:2.10.3-python3.12](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
+* Based on official Airflow 2 Image [apache/airflow:2.10.4-python3.12](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
 * Docker entrypoint script is forked from [dataops-sre/docker-airflow2](https://github.com/dataops-sre/docker-airflow2)
 * Install [Docker](https://www.docker.com/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
@@ -16,11 +16,11 @@ If you want to run another executor, use the docker-compose.yml files provided i
 
 For **LocalExecutor** :
 
-    docker-compose -f docker-compose-LocalExecutor.yml up -d
+    docker compose -f docker-compose-LocalExecutor.yml up -d
 
 For **CeleryExecutor** :
 
-    docker-compose -f docker-compose-CeleryExecutor.yml up -d
+    docker compose -f docker-compose-CeleryExecutor.yml up -d
 
 NB : If you want to have DAGs example loaded (default=False), you've to set the following environment variable in docker-compose files :
 
@@ -74,7 +74,7 @@ In order to incorporate plugins into your docker container
 
 Easy scaling using docker-compose:
 
-    docker-compose -f docker-compose-CeleryExecutor.yml scale worker=5
+    docker compose -f docker-compose-CeleryExecutor.yml scale worker=5
 
 This can be used to scale to a multi node setup using docker swarm.
 
@@ -86,7 +86,7 @@ If you want to run other airflow sub-commands, such as `list_dags` or `clear` yo
 
 or with your docker-compose set up like this:
 
-    docker-compose -f docker-compose-CeleryExecutor.yml run --rm webserver airflow dags list
+    docker compose -f docker-compose-CeleryExecutor.yml run --rm webserver airflow dags list
 
 You can also use this to run a bash shell or any other command in the same environment that airflow would be run in:
 
