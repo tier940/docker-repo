@@ -1,11 +1,11 @@
-FROM --platform=$BUILDPLATFORM docker.io/alpine:3.20
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.21
 
 ARG TARGETOS TARGETARCH
 LABEL maintainer="tier940"
 
 # Squid install
 RUN apk update \
-  && apk add --no-cache squid~=6.9-r0
+  && apk add --no-cache squid~=6.12-r0
 
 # COPY squid-ssl-bump.conf /etc/squid/squid.conf
 COPY squid.conf.opt /etc/squid/squid.conf
