@@ -45,16 +45,27 @@ func getIngressHosts(clientset *kubernetes.Clientset, excludeSelf bool) ([]HostI
 	return hosts, nil
 }
 
+func getEnv(key, fallback string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback
+	}
+	return value
+}
+
+func handleError(err error, message string) {
+	if err != nil {
+		log.Fatalf("%s: %v", message, err)
+	}
+}
+
 func main() {
 	// Kubernetes APIクライアントのセットアップ
 	config, err := rest.InClusterConfig()
-	if err != nil {
-		log.Fatalf("Error building in-cluster config: %v", err)
-	}
+	handleError(err, "Error building in-cluster config")
+
 	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		log.Fatalf("Error creating Kubernetes client: %v", err)
-	}
+	handleError(err, "Error creating Kubernetes client")
 
 	// HTTP サーバーのセットアップ
 	http.HandleFunc("/hosts", func(w http.ResponseWriter, r *http.Request) {
@@ -68,10 +79,7 @@ func main() {
 		json.NewEncoder(w).Encode(hosts)
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	port := getEnv("PORT", "8080")
 
 	log.Printf("Starting server on :%s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
