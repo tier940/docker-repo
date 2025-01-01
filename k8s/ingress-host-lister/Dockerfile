@@ -4,7 +4,6 @@ WORKDIR /app
 COPY go.mod go.sum main.go ./
 RUN go mod tidy \
     && go build -ldflags="-s -w" -v -o main . \
-    && chmod +x main \
-    go clean --cache
+    && chmod +x main
 
 ENTRYPOINT ["./main"]
