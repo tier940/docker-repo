@@ -112,6 +112,8 @@ jobs:
 
       - name: Run Dockle Security Scan
         if: contains(github.ref, format('tags/{0}', matrix.tag_prefix)) # Ensure this step also runs conditionally
+        env:
+          DOCKER_CONTENT_TRUST: 0
         run: |
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
