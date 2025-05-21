@@ -111,17 +111,14 @@ jobs:
           tags: ghcr.io/${{ env.REPO_OWNER }}/${{ matrix.image_name }}:latest,ghcr.io/${{ env.REPO_OWNER }}/${{ matrix.image_name }}:${{ env.VERSION }}
 
       - name: Run Dockle Security Scan
-        if: contains(github.ref, format('tags/{0}', matrix.tag_prefix)) # Ensure this step also runs conditionally
+        if: contains(github.ref, format('tags/{0}', matrix.tag_prefix))
         env:
           DOCKER_CONTENT_TRUST: 0
         run: |
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            -v $(pwd):/root/.docker/ \
             goodwithtech/dockle:latest \
-            --input-type docker \
-            --input-file "ghcr.io/${{ env.REPO_OWNER }}/${{ matrix.image_name }}:latest" \
-            --output json > dockle-report-${{ matrix.name }}.json
+            --output json ghcr.io/${{ env.REPO_OWNER }}/${{ matrix.image_name }}:latest > dockle-report-${{ matrix.name }}.json
 
       - name: Upload Report
         uses: actions/upload-artifact@v4
