@@ -74,6 +74,7 @@ jobs:
             image_name: php82
             context: ./web/php/8.2
             tag_prefix: php82-v
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

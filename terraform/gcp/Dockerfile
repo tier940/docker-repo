@@ -1,8 +1,8 @@
-FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:504.0.1-alpine
+FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:523.0.0-slim
 
 ARG TARGETOS TARGETARCH
-ARG TFSEC_VERSION="1.28.11"
-ARG TFLINT_VERSION="0.54.0"
+ARG TFSEC_VERSION="1.28.14"
+ARG TFLINT_VERSION="0.57.0"
 LABEL maintainer="tier940"
 
 RUN apk add curl bash git unzip \

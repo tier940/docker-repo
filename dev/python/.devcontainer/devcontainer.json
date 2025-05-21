@@ -2,7 +2,7 @@
     "name": "python",
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
-      "ghcr.io/devcontainers/features/python:1.6.5": {
+      "ghcr.io/devcontainers/features/python:1.7.1": {
         "version": "3.12"
       }
     },

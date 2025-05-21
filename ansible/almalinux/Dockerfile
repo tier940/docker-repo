@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/almalinux:9.5
+FROM --platform=$BUILDPLATFORM docker.io/almalinux:9.6
 
 ARG TARGETOS TARGETARCH
 ENV container docker

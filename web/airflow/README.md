@@ -1,7 +1,7 @@
 # Docker Airflow2
 ## Informations
 
-* Based on official Airflow 2 Image [apache/airflow:2.10.4-python3.12](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
+* Based on official Airflow 2 Image [apache/airflow:2.11.0-python3.12](https://hub.docker.com/r/apache/airflow) and uses the official [Postgres](https://hub.docker.com/_/postgres/) as backend and [Redis](https://hub.docker.com/_/redis/) as queue
 * Docker entrypoint script is forked from [dataops-sre/docker-airflow2](https://github.com/dataops-sre/docker-airflow2)
 * Install [Docker](https://www.docker.com/)
 * Install [Docker Compose](https://docs.docker.com/compose/install/)
@@ -12,7 +12,7 @@ By default, docker-airflow runs Airflow with **SequentialExecutor** :
 
     docker run -d -p 8080:8080 ghcr.io/tier940/airflow2 webserver
 
-If you want to run another executor, use the docker-compose.yml files provided in this repository.
+If you want to run another executor, use the docker.yml files provided in this repository.
 
 For **LocalExecutor** :
 
@@ -28,7 +28,7 @@ NB : If you want to have DAGs example loaded (default=False), you've to set the 
 
 
 If you want to use Ad hoc query, make sure you've configured connections:
-Go to Admin -> Connections and Edit "postgres_default" set this values (equivalent to values in airflow.cfg/docker-compose*.yml) :
+Go to Admin -> Connections and Edit "postgres_default" set this values (equivalent to values in airflow.cfg/docker*.yml) :
 - Host : postgres
 - Schema : airflow
 - Login : airflow
