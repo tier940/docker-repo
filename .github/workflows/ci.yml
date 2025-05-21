@@ -98,7 +98,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: "[ghcr.io/${{ env.REPO_OWNER }}/${{ matrix.image_name }}] Push image to GitHub Container Registry"
-        if: contains(github.ref, format('tags/{0}', matrix.tag_prefix))
+        if: startsWith(github.ref, format('refs/tags/{0}', matrix.tag_prefix))
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
