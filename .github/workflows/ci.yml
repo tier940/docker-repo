@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - squid-v*
+      - desktop-lxde-v*
       - airflow2-v*
       - litespeed-v*
       - ansible-almalinux-v*
@@ -30,6 +31,10 @@ jobs:
             image_name: squid-lxc
             context: ./proxy/squid
             tag_prefix: squid-v
+          - name: desktop-lxde
+            image_name: desktop-lxde
+            context: ./desktop/lxde
+            tag_prefix: desktop-lxde-v
           - name: ansible-rockylinux
             image_name: ansible-rockylinux
             context: ./ansible/rockylinux

@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  lxde:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lxde-desktop
+    privileged: true
+    tty: true
+    ports:
+      - "5901:5901"
+    environment:
+      - TZ=Asia/Tokyo
