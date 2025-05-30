@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/alpine:3.21
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.22
 
 ARG TARGETOS TARGETARCH
 LABEL maintainer="tier940"
