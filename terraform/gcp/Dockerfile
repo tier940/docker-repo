@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:523.0.1-slim AS builder
+FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:526.0.1-slim AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -30,7 +30,7 @@ RUN curl -Ls -o /tmp/tfversion.tar.gz https://github.com/tfversion/tfversion/rel
 ########################################
 # Final Build Stage
 ########################################
-FROM gcr.io/google.com/cloudsdktool/cloud-sdk:523.0.1-slim
+FROM gcr.io/google.com/cloudsdktool/cloud-sdk:526.0.1-slim
 
 COPY --from=builder /usr/local/bin/tfsec /usr/local/bin/tfsec
 COPY --from=builder /usr/local/bin/tflint /usr/local/bin/tflint
