@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/debian:11
+FROM --platform=$BUILDPLATFORM docker.io/debian:12-slim
 LABEL maintainer="tier940"
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     task-lxde-desktop \
     tigervnc-standalone-server \
     tigervnc-common \
+    tigervnc-tools \
     xterm \
     dbus-x11 \
     x11-xserver-utils \
@@ -36,7 +37,7 @@ export DISPLAY=:1\n\
 touch /home/${USER}/.Xauthority\n\
 export XAUTHORITY=/home/${USER}/.Xauthority\n\
 xauth -f /home/${USER}/.Xauthority add :1 . $(mcookie)\n\
-vncserver -geometry 1366x768 -depth 24 -SecurityTypes VncAuth -localhost no :1\n\
+vncserver -geometry 1280x720 -depth 16 -SecurityTypes VncAuth -localhost no :1\n\
 startlxde &\n\
 tail -f /dev/null' > /home/${USER}/vnc_start.sh && \
     chmod +x /home/${USER}/vnc_start.sh && \
