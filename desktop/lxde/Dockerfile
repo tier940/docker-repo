@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/debian:12-slim
+FROM --platform=$BUILDPLATFORM docker.io/debian:13-slim
 LABEL maintainer="tier940"
 
 ENV DEBIAN_FRONTEND=noninteractive
