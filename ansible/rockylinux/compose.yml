@@ -6,6 +6,8 @@ services:
     privileged: true
     container_name: rockylinux
     tty: true
+    cgroup: host
+    stop_signal: SIGRTMIN+3
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - ./work:/root/work
