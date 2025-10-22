@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.27.34 AS builder
+FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.31.19 AS builder
 
 ARG TARGETOS TARGETARCH
 ARG AWS_VAULT_VERSION="7.2.0"
@@ -33,7 +33,7 @@ RUN curl -Ls -o /tmp/tfversion.tar.gz https://github.com/tfversion/tfversion/rel
 ########################################
 # Final Build Stage
 ########################################
-FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.27.34
+FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.31.19
 
 ARG USERNAME=ec2-user
 ARG GROUPNAME=ec2-user
