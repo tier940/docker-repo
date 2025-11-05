@@ -2,7 +2,7 @@ module github.com/tier940/ingressHostLister
 
 go 1.23.0
 
-toolchain go1.23.4
+toolchain go1.25.4
 
 require (
 	k8s.io/apimachinery v0.32.0
