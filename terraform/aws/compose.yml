@@ -7,4 +7,4 @@ services:
     container_name: terraform
     tty: true
     volumes:
-      - ./:/home/user/work
+      - ./:/home/ec2-user/work
