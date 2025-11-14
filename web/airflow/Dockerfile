@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.11.0-python3.12
+FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:3.1.3-python3.12
 
 # Setup Airflow
 ENV AIRFLOW_VERSION=2.11.0
