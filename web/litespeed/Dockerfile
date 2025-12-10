@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/ubuntu:22.04
+FROM --platform=$BUILDPLATFORM docker.io/ubuntu:24.04
 
 ARG TARGETOS TARGETARCH
 LABEL maintainer="tier940"
