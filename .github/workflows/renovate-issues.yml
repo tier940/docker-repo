@@ -1,0 +1,171 @@
+name: Sync Renovate Dashboard to Issues
+
+# Renovate only ever maintains a single Dependency Dashboard issue. This workflow
+# fans that dashboard out into one issue per pending update, so each update has its
+# own entry point. Approving an update is still done by ticking its checkbox on the
+# dashboard; these issues link straight to it.
+
+on:
+  issues:
+    types: [edited, opened]
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+env:
+  DASHBOARD_ISSUE: 7
+  QUEUE_LABEL: renovate-queue
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # Issue events fire for every issue in the repo; only the dashboard matters.
+    # A job-level `if` cannot read `env`, so DASHBOARD_ISSUE has to be repeated
+    # literally here. Change both together.
+    if: github.event_name != 'issues' || github.event.issue.number == 7
+    steps:
+      - name: Sync dashboard entries to issues
+        uses: actions/github-script@v7
+        env:
+          DASHBOARD_ISSUE: ${{ env.DASHBOARD_ISSUE }}
+          QUEUE_LABEL: ${{ env.QUEUE_LABEL }}
+        with:
+          script: |
+            const dashboardNumber = Number(process.env.DASHBOARD_ISSUE);
+            const queueLabel = process.env.QUEUE_LABEL;
+            const { owner, repo } = context.repo;
+
+            // Checkboxes that act on the dashboard as a whole rather than on a
+            // single update. They carry no branch and must never become issues.
+            const META_MARKERS = [
+              'create-all-rate-limited-prs',
+              'rebase-all-open-prs',
+              'approve-all-pending-prs',
+              'manual job',
+              'rebase-check',
+            ];
+
+            // Dashboard sections holding updates that are waiting on us. Sections
+            // such as "Open" (already a PR) or "Detected Dependencies" are skipped.
+            const PENDING_SECTIONS = [
+              'pending approval',
+              'awaiting schedule',
+              'rate-limited',
+              'edited/blocked',
+              'errored',
+              'closed/ignored',
+              'ignored or blocked',
+            ];
+
+            const dashboard = await github.rest.issues.get({
+              owner, repo, issue_number: dashboardNumber,
+            });
+            const body = dashboard.data.body || '';
+
+            // Walk the body section by section so a checkbox is only picked up when
+            // it sits under a heading we consider actionable.
+            const entries = new Map();
+            const seenSections = [];
+            let currentSection = '';
+            for (const line of body.split('\n')) {
+              const heading = line.match(/^#{2,3}\s+(.+?)\s*$/);
+              if (heading) {
+                currentSection = heading[1].toLowerCase();
+                seenSections.push(currentSection);
+                continue;
+              }
+              if (!PENDING_SECTIONS.includes(currentSection)) continue;
+
+              const item = line.match(/^\s*-\s*\[[ x]\]\s*<!--\s*(.+?)\s*-->\s*(.*)$/);
+              if (!item) continue;
+
+              const marker = item[1];
+              if (META_MARKERS.some((m) => marker.includes(m))) continue;
+
+              // Markers look like `unlimit-branch=renovate/postgres-18.x`.
+              const branch = marker.split('=').slice(1).join('=').trim();
+              if (!branch) continue;
+
+              // Strip markdown links so the title reads plainly.
+              const title = item[2]
+                .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+                .trim();
+              if (!title) continue;
+
+              entries.set(branch, { branch, title, section: currentSection });
+            }
+
+            // Renovate renaming a section would otherwise fail silently: entries
+            // get skipped, no issues appear, and nothing errors.
+            core.info(`Dashboard sections: ${seenSections.join(', ') || '(none)'}`);
+            const unmatched = seenSections.filter(
+              (s) => !PENDING_SECTIONS.includes(s) && s !== 'detected dependencies' && s !== 'open',
+            );
+            if (unmatched.length) {
+              core.warning(`Unrecognised dashboard section(s), entries skipped: ${unmatched.join(', ')}`);
+            }
+            core.info(`Dashboard lists ${entries.size} pending update(s).`);
+
+            // Dedup against closed issues as well, otherwise every closed issue is
+            // recreated on the next run.
+            const tracked = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, state: 'all', labels: queueLabel, per_page: 100,
+            });
+
+            const byBranch = new Map();
+            for (const issue of tracked) {
+              if (issue.pull_request) continue; // listForRepo returns PRs too.
+              const found = (issue.body || '').match(/<!--\s*renovate-branch=(.+?)\s*-->/);
+              if (found) byBranch.set(found[1], issue);
+            }
+
+            let created = 0;
+            for (const entry of entries.values()) {
+              // A closed issue stays closed. Rejected updates sit on the dashboard
+              // under Closed/Ignored indefinitely, so reopening on sight would make
+              // an update impossible to decline.
+              if (byBranch.has(entry.branch)) continue;
+
+              const issueBody = [
+                `Renovate has an update waiting on the [Dependency Dashboard](../issues/${dashboardNumber}).`,
+                '',
+                `- **Update**: ${entry.title}`,
+                `- **Branch**: \`${entry.branch}\``,
+                `- **Dashboard section**: ${entry.section}`,
+                '',
+                `To start it, tick this update's checkbox on issue #${dashboardNumber}.`,
+                'Renovate then opens the pull request. This issue closes automatically',
+                'once the update is no longer pending on the dashboard.',
+                '',
+                `<!-- renovate-branch=${entry.branch} -->`,
+              ].join('\n');
+
+              const made = await github.rest.issues.create({
+                owner, repo,
+                title: entry.title,
+                body: issueBody,
+                labels: [queueLabel, 'dependencies'],
+              });
+              created += 1;
+              core.info(`Created #${made.data.number} for ${entry.branch}`);
+            }
+
+            // Anything no longer pending has been approved, merged or superseded.
+            let closed = 0;
+            for (const [branch, issue] of byBranch) {
+              if (issue.state !== 'open' || entries.has(branch)) continue;
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: issue.number,
+                body: 'No longer pending on the Dependency Dashboard — closing.',
+              });
+              await github.rest.issues.update({
+                owner, repo, issue_number: issue.number, state: 'closed',
+              });
+              closed += 1;
+              core.info(`Closed #${issue.number} for ${branch}`);
+            }
+
+            core.notice(`Renovate queue synced: ${created} created, ${closed} closed.`);
