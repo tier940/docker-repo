@@ -23,6 +23,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     # Issue events fire for every issue in the repo; only the dashboard matters.
+    # A job-level `if` cannot read `env`, so DASHBOARD_ISSUE has to be repeated
+    # literally here. Change both together.
     if: github.event_name != 'issues' || github.event.issue.number == 7
     steps:
       - name: Sync dashboard entries to issues
@@ -66,11 +68,13 @@ jobs:
             // Walk the body section by section so a checkbox is only picked up when
             // it sits under a heading we consider actionable.
             const entries = new Map();
+            const seenSections = [];
             let currentSection = '';
             for (const line of body.split('\n')) {
               const heading = line.match(/^#{2,3}\s+(.+?)\s*$/);
               if (heading) {
                 currentSection = heading[1].toLowerCase();
+                seenSections.push(currentSection);
                 continue;
               }
               if (!PENDING_SECTIONS.includes(currentSection)) continue;
@@ -94,6 +98,15 @@ jobs:
               entries.set(branch, { branch, title, section: currentSection });
             }
 
+            // Renovate renaming a section would otherwise fail silently: entries
+            // get skipped, no issues appear, and nothing errors.
+            core.info(`Dashboard sections: ${seenSections.join(', ') || '(none)'}`);
+            const unmatched = seenSections.filter(
+              (s) => !PENDING_SECTIONS.includes(s) && s !== 'detected dependencies' && s !== 'open',
+            );
+            if (unmatched.length) {
+              core.warning(`Unrecognised dashboard section(s), entries skipped: ${unmatched.join(', ')}`);
+            }
             core.info(`Dashboard lists ${entries.size} pending update(s).`);
 
             // Dedup against closed issues as well, otherwise every closed issue is
@@ -104,23 +117,17 @@ jobs:
 
             const byBranch = new Map();
             for (const issue of tracked) {
+              if (issue.pull_request) continue; // listForRepo returns PRs too.
               const found = (issue.body || '').match(/<!--\s*renovate-branch=(.+?)\s*-->/);
               if (found) byBranch.set(found[1], issue);
             }
 
             let created = 0;
             for (const entry of entries.values()) {
-              const existing = byBranch.get(entry.branch);
-              if (existing) {
-                if (existing.state === 'open') continue;
-                // Back on the dashboard after being closed: reopen rather than
-                // opening a duplicate.
-                await github.rest.issues.update({
-                  owner, repo, issue_number: existing.number, state: 'open',
-                });
-                core.info(`Reopened #${existing.number} for ${entry.branch}`);
-                continue;
-              }
+              // A closed issue stays closed. Rejected updates sit on the dashboard
+              // under Closed/Ignored indefinitely, so reopening on sight would make
+              // an update impossible to decline.
+              if (byBranch.has(entry.branch)) continue;
 
               const issueBody = [
                 `Renovate has an update waiting on the [Dependency Dashboard](../issues/${dashboardNumber}).`,
