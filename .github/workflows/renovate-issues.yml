@@ -54,6 +54,8 @@ jobs:
               'rate-limited',
               'edited/blocked',
               'errored',
+              'closed/ignored',
+              'ignored or blocked',
             ];
 
             const dashboard = await github.rest.issues.get({
