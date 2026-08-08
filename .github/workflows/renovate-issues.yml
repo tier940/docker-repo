@@ -78,6 +78,7 @@ jobs:
               'deprecations / replacements',
               'abandoned dependencies',
               'vulnerabilities',
+              'config migration needed',
             ];
 
             const dashboard = await github.rest.issues.get({
@@ -91,7 +92,10 @@ jobs:
             const seenSections = [];
             let currentSection = '';
             for (const line of body.split('\n')) {
-              const heading = line.match(/^#{2,3}\s+(.+?)\s*$/);
+              // Only `##`. Renovate splits a section into `### <category>` subheadings
+              // when updates are categorised, and those must not be read as a change
+              // of section or every entry beneath them is dropped.
+              const heading = line.match(/^##\s+(.+?)\s*$/);
               if (heading) {
                 currentSection = heading[1].toLowerCase();
                 seenSections.push(currentSection);
@@ -179,7 +183,14 @@ jobs:
             // is pending. If parsing went wrong — a renamed section, an unexpected
             // body — that picture is empty or partial, and closing against it would
             // wipe the queue. Fail loudly instead; creation above is safe to keep.
-            if (unmatched.length || (entries.size === 0 && byBranch.size > 0)) {
+            // "Nothing pending" is a normal state once everything is up to date, so
+            // an empty parse only looks suspicious when no known heading was found
+            // at all. Detected Dependencies is always rendered, so a healthy body
+            // always matches something here.
+            const sawKnownSection = seenSections.some(
+              (s) => PENDING_SECTIONS.includes(s) || KNOWN_OTHER_SECTIONS.includes(s),
+            );
+            if (unmatched.length || (entries.size === 0 && byBranch.size > 0 && !sawKnownSection)) {
               core.setFailed(
                 'Dashboard parse looks wrong (unrecognised sections, or no entries ' +
                 'while tracking issues exist). Skipping the close pass so the queue ' +
