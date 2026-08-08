@@ -6,5 +6,18 @@
   "prCreation": "approval",
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
-  "branchConcurrentLimit": 0
+  "branchConcurrentLimit": 0,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track the squid package version pinned in proxy/squid/Dockerfile. packageNameTemplate is hardcoded to alpine_3_21 to match the base image's current major.minor (docker.io/alpine:3.21) — if that base image is bumped to a new Alpine release, update this alongside it or squid tracking silently starts looking up the wrong repository.",
+      "managerFilePatterns": ["^proxy/squid/Dockerfile$"],
+      "matchStrings": [
+        "apk add --no-cache\\s+(?<depName>[a-zA-Z0-9\\-]+)~=(?<currentValue>[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-r[0-9]+)?)"
+      ],
+      "datasourceTemplate": "repology",
+      "versioningTemplate": "apk",
+      "packageNameTemplate": "alpine_3_21/{{{depName}}}"
+    }
+  ]
 }
