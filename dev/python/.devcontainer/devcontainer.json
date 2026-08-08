@@ -19,7 +19,7 @@
       "vscode": {
         "settings": {
           "workbench.editor.wrapTabs": true,
-          "terminal.integrated.shell.linux": "/bin/bash",
+          "terminal.integrated.defaultProfile.linux": "bash",
           "editor.formatOnSave": true,
           "files.autoSave": "afterDelay",
           "files.watcherExclude": {
