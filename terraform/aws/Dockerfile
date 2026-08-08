@@ -1,9 +1,9 @@
-FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.31.19 AS builder
+FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.35.8 AS builder
 
 ARG TARGETOS TARGETARCH
 ARG AWS_VAULT_VERSION="7.2.0"
 ARG TFSEC_VERSION="1.28.14"
-ARG TFLINT_VERSION="0.58.0"
+ARG TFLINT_VERSION="0.64.0"
 ARG TFV_VERSION="0.2.1"
 
 RUN yum install -y shadow-utils tzdata git tar unzip curl > /dev/null \
@@ -25,7 +25,7 @@ RUN yum install -y shadow-utils tzdata git tar unzip curl > /dev/null \
 ########################################
 # Final Build Stage
 ########################################
-FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.31.19
+FROM --platform=$BUILDPLATFORM public.ecr.aws/aws-cli/aws-cli:2.35.8
 
 ARG USERNAME=ec2-user
 ARG GROUPNAME=ec2-user
