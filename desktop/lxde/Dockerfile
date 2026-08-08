@@ -2,7 +2,6 @@ FROM --platform=$BUILDPLATFORM docker.io/debian:12-slim
 LABEL maintainer="tier940"
 
 ENV DEBIAN_FRONTEND=noninteractive
-ARG TARGETOS TARGETARCH
 ENV USER=vncuser
 ENV PASSWORD=vncpass
 

@@ -1,6 +1,5 @@
 FROM --platform=$BUILDPLATFORM docker.io/almalinux:9.6
 
-ARG TARGETOS TARGETARCH
 ENV container docker
 LABEL maintainer="tier940"
 

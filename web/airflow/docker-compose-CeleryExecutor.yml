@@ -1,7 +1,6 @@
 services:
   redis:
     image: 'redis:8'
-    # command: redis-server --requirepass redispass
 
   postgres:
     image: postgres:17
@@ -24,14 +23,8 @@ services:
       - AIRFLOW__CORE__LOAD_EXAMPLES=false
       - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      # - POSTGRES_USER=airflow
-      # - POSTGRES_PASSWORD=airflow
-      # - POSTGRES_DB=airflow
-      # - REDIS_PASSWORD=redispass
     volumes:
       - ./dags:/opt/airflow/dags
-      # Uncomment to include custom plugins
-      # - ./plugins:/usr/local/airflow/plugins
     ports:
       - "8080:8080"
     command: webserver
@@ -50,7 +43,6 @@ services:
       - redis
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      # - REDIS_PASSWORD=redispass
     ports:
       - "5555:5555"
     command: airflow celery flower
@@ -64,16 +56,10 @@ services:
       - webserver
     volumes:
       - ./dags:/opt/airflow/dags
-      # Uncomment to include custom plugins
-      # - ./plugins:/usr/local/airflow/plugins
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=false
       - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      # - POSTGRES_USER=airflow
-      # - POSTGRES_PASSWORD=airflow
-      # - POSTGRES_DB=airflow
-      # - REDIS_PASSWORD=redispass
     command: airflow scheduler
 
   worker:
@@ -85,13 +71,7 @@ services:
       - scheduler
     volumes:
       - ./dags:/opt/airflow/dags
-      # Uncomment to include custom plugins
-      # - ./plugins:/usr/local/airflow/plugins
     environment:
       - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      # - POSTGRES_USER=airflow
-      # - POSTGRES_PASSWORD=airflow
-      # - POSTGRES_DB=airflow
-      # - REDIS_PASSWORD=redispass
     command: airflow celery worker

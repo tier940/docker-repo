@@ -1,6 +1,5 @@
 FROM --platform=$BUILDPLATFORM docker.io/rockylinux:9.3
 
-ARG TARGETOS TARGETARCH
 ENV container docker
 LABEL maintainer="tier940"
 

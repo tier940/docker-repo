@@ -7,24 +7,16 @@ ARG TFLINT_VERSION="0.58.0"
 ARG TFV_VERSION="0.2.1"
 
 RUN yum install -y shadow-utils tzdata git tar unzip curl > /dev/null \
-    && yum clean all -y > /dev/null
-
-# Install aws-vault
-RUN curl -Ls -o /usr/local/bin/aws-vault https://github.com/99designs/aws-vault/releases/download/v${AWS_VAULT_VERSION}/aws-vault-${TARGETOS}-${TARGETARCH} \
-    && chmod +x /usr/local/bin/aws-vault
-
-# Install tfsec
-RUN curl -Ls -o /usr/local/bin/tfsec https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-${TARGETOS}-${TARGETARCH} \
-    && chmod +x /usr/local/bin/tfsec
-
-# Install tflint
-RUN curl -Ls -o /tmp/tflint.zip https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_${TARGETOS}_${TARGETARCH}.zip \
+    && yum clean all -y > /dev/null \
+    && curl -Ls -o /usr/local/bin/aws-vault https://github.com/99designs/aws-vault/releases/download/v${AWS_VAULT_VERSION}/aws-vault-${TARGETOS}-${TARGETARCH} \
+    && chmod +x /usr/local/bin/aws-vault \
+    && curl -Ls -o /usr/local/bin/tfsec https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-${TARGETOS}-${TARGETARCH} \
+    && chmod +x /usr/local/bin/tfsec \
+    && curl -Ls -o /tmp/tflint.zip https://github.com/terraform-linters/tflint/releases/download/v${TFLINT_VERSION}/tflint_${TARGETOS}_${TARGETARCH}.zip \
     && unzip /tmp/tflint.zip -d /usr/local/bin/ \
     && chmod +x /usr/local/bin/tflint \
-    && rm -f /tmp/tflint.zip
-
-# tfversion
-RUN curl -Ls -o /tmp/tfversion.tar.gz https://github.com/tfversion/tfversion/releases/download/v${TFV_VERSION}/tfversion_${TFV_VERSION}_${TARGETOS}_${TARGETARCH}.tar.gz \
+    && rm -f /tmp/tflint.zip \
+    && curl -Ls -o /tmp/tfversion.tar.gz https://github.com/tfversion/tfversion/releases/download/v${TFV_VERSION}/tfversion_${TFV_VERSION}_${TARGETOS}_${TARGETARCH}.tar.gz \
     && tar -xzf /tmp/tfversion.tar.gz -C /usr/local/bin/ \
     && chmod +x /usr/local/bin/tfversion \
     && rm -f /tmp/tfversion.tar.gz

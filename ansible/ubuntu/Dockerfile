@@ -1,7 +1,6 @@
 FROM --platform=$BUILDPLATFORM docker.io/ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TARGETOS TARGETARCH
 ENV container docker
 LABEL maintainer="tier940"
 
