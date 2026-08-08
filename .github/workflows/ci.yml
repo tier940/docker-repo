@@ -5,7 +5,7 @@ on:
     tags:
       - squid-v*
       - desktop-lxde-v*
-      - airflow2-v*
+      - airflow-v*
       - litespeed-v*
       - ansible-almalinux-v*
       - ansible-rockylinux-v*
@@ -47,10 +47,10 @@ jobs:
             image_name: ansible-ubuntu
             context: ./ansible/ubuntu
             tag_prefix: ansible-ubuntu-v
-          - name: airflow2
-            image_name: airflow2
+          - name: airflow
+            image_name: airflow
             context: ./web/airflow
-            tag_prefix: airflow2-v
+            tag_prefix: airflow-v
           - name: litespeed
             image_name: litespeed
             context: ./web/litespeed
