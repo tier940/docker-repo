@@ -2,8 +2,10 @@ name: Sync Renovate Dashboard to Issues
 
 # Renovate only ever maintains a single Dependency Dashboard issue. This workflow
 # fans that dashboard out into one issue per pending update, so each update has its
-# own entry point. Approving an update is still done by ticking its checkbox on the
-# dashboard; these issues link straight to it.
+# own entry point. renovate.json sets prCreation: "approval", so Renovate pushes
+# the real commit to each update's branch but withholds the PR — this workflow
+# reads that branch's actual diff (via compareCommits) into the issue body, so an
+# issue carries what a PR description would: which files, what changed.
 
 on:
   issues:
@@ -14,6 +16,7 @@ on:
 
 permissions:
   issues: write
+  contents: read
 
 env:
   DASHBOARD_ISSUE: 7
@@ -49,11 +52,14 @@ jobs:
             ];
 
             // Dashboard sections holding updates that are waiting on us. Sections
-            // such as "Open" (already a PR) or "Detected Dependencies" are skipped.
+            // "Detected Dependencies" is skipped — it's informational, not a queue.
             // Taken verbatim from Renovate's dashboard renderer (the `title` argument
             // to getBranchesListMd in lib/workers/repository/dependency-dashboard.ts),
-            // lowercased. Every section that means "not updated yet" is listed, so an
-            // update is visible as an issue no matter which state it is sitting in.
+            // lowercased. Every section that means "not merged yet" is listed, so the
+            // issue survives from first appearing on the dashboard through to the PR
+            // actually landing — not just until a PR exists. "Open" (PR created, not
+            // yet merged) is included on purpose: closing the issue as soon as a PR
+            // opens would drop in-flight work from the queue.
             const PENDING_SECTIONS = [
               'pending approval',
               'group size not met',
@@ -66,13 +72,12 @@ jobs:
               'pending branch automerge',
               'other branches',
               'pr closed (blocked)',
+              'open',
             ];
 
-            // Sections that are not pending work: an update already has a PR, or the
-            // heading is informational. Listed so the unrecognised-section warning
-            // stays quiet for them.
+            // Sections that are not pending work: informational headings only.
+            // Listed so the unrecognised-section warning stays quiet for them.
             const KNOWN_OTHER_SECTIONS = [
-              'open',
               'detected dependencies',
               'repository problems',
               'deprecations / replacements',
@@ -113,13 +118,19 @@ jobs:
               const branch = marker.split('=').slice(1).join('=').trim();
               if (!branch) continue;
 
+              // Under "Open" the title is itself a markdown link to the PR, e.g.
+              // "[Update ubuntu...](../pull/196)" — capture the PR number before
+              // stripping the link so the issue can point straight at it.
+              const prMatch = item[2].match(/\(\.\.\/pull\/(\d+)\)/);
+              const prNumber = prMatch ? Number(prMatch[1]) : null;
+
               // Strip markdown links so the title reads plainly.
               const title = item[2]
                 .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
                 .trim();
               if (!title) continue;
 
-              entries.set(branch, { branch, title, section: currentSection });
+              entries.set(branch, { branch, title, section: currentSection, prNumber });
             }
 
             // Renovate renaming a section would otherwise fail silently: entries
@@ -146,6 +157,83 @@ jobs:
               if (found) byBranch.set(found[1], issue);
             }
 
+            // prCreation: "approval" makes Renovate push the real commit to the
+            // branch and withhold only the PR, so the actual diff already exists —
+            // no need to reconstruct it from the dashboard's markdown summary. A
+            // branch that isn't pushed yet (still needs-approval with no commits)
+            // 404s here; that's normal, not an error, and the issue just falls back
+            // to the minimal body.
+            async function describeBranch(branch) {
+              try {
+                const cmp = await github.rest.repos.compareCommits({
+                  owner, repo, base: 'main', head: branch,
+                });
+                const files = cmp.data.files || [];
+                return {
+                  files: files.map((f) => `\`${f.filename}\` (+${f.additions}/-${f.deletions})`),
+                  compareUrl: `../compare/main...${branch}`,
+                };
+              } catch (err) {
+                // 404 means the branch has no commits yet, which is routine for a
+                // pending update. Anything else (permissions, rate limit) is a real
+                // failure that would otherwise look identical to "nothing to show
+                // yet" — surface it instead of silently degrading.
+                if (err.status !== 404) {
+                  core.warning(`compareCommits failed for ${branch}: ${err.status || err.message}`);
+                }
+                return null;
+              }
+            }
+
+            // "No diff yet" means something different depending on why the branch
+            // has no commits: an update still waiting its turn will get one; an
+            // update whose PR was closed and branch deleted will not, until someone
+            // ticks its recreate checkbox on the dashboard.
+            function noDiffNote(section) {
+              if (section === 'pr closed (blocked)') {
+                return [
+                  '_No branch to show — its PR was previously closed. Renovate will not',
+                  'recreate it until the recreate checkbox for this update is ticked on',
+                  `the [Dependency Dashboard](../issues/${dashboardNumber})._`,
+                ];
+              }
+              return [
+                '_The branch has no commits yet — Renovate creates it once this',
+                "update's turn comes up. Re-check after the next sync._",
+              ];
+            }
+
+            function renderBody(entry, diff) {
+              const lines = [
+                'A dependency update is available.',
+                '',
+                `- **Update**: ${entry.title}`,
+                `- **Branch**: \`${entry.branch}\``,
+              ];
+              if (entry.prNumber) {
+                lines.push(`- **Pull request**: #${entry.prNumber}`);
+              }
+              if (diff && diff.files.length) {
+                lines.push('', '**Files changed:**', ...diff.files.map((f) => `- ${f}`));
+                lines.push('', `[Compare against main](${diff.compareUrl})`);
+              } else if (!entry.prNumber) {
+                lines.push('', ...noDiffNote(entry.section));
+              }
+              lines.push(
+                '',
+                'Do the update however you like — by hand, by pushing to this branch',
+                'yourself, or by opening a PR from it directly. Once the new version has',
+                'landed, Renovate stops listing it and this issue closes itself on the',
+                'next sync. Closing it yourself means the update is declined, and it',
+                'will not be raised again.',
+                '',
+                `Listed on the [Dependency Dashboard](../issues/${dashboardNumber}) as: ${entry.section}`,
+                '',
+                `<!-- renovate-branch=${entry.branch} -->`,
+              );
+              return lines.join('\n');
+            }
+
             let created = 0;
             for (const entry of entries.values()) {
               // A closed issue stays closed. Rejected updates sit on the dashboard
@@ -153,30 +241,33 @@ jobs:
               // an update impossible to decline.
               if (byBranch.has(entry.branch)) continue;
 
-              const issueBody = [
-                'A dependency update is available.',
-                '',
-                `- **Update**: ${entry.title}`,
-                `- **Branch**: \`${entry.branch}\``,
-                '',
-                'Do the update however you like — by hand, or on a branch of your own.',
-                'Once the new version has landed, Renovate stops listing it and this',
-                'issue closes itself on the next sync. Closing it yourself means the',
-                'update is declined, and it will not be raised again.',
-                '',
-                `Listed on the [Dependency Dashboard](../issues/${dashboardNumber}) as: ${entry.section}`,
-                '',
-                `<!-- renovate-branch=${entry.branch} -->`,
-              ].join('\n');
-
+              const diff = await describeBranch(entry.branch);
               const made = await github.rest.issues.create({
                 owner, repo,
                 title: entry.title,
-                body: issueBody,
+                body: renderBody(entry, diff),
                 labels: [queueLabel, 'dependencies'],
               });
               created += 1;
               core.info(`Created #${made.data.number} for ${entry.branch}`);
+            }
+
+            // Keep existing open issues current: a branch with no diff yesterday may
+            // have commits today, and this is also how the wording of older issues
+            // catches up when the template changes.
+            let updated = 0;
+            for (const [branch, issue] of byBranch) {
+              if (issue.state !== 'open') continue;
+              const entry = entries.get(branch);
+              if (!entry) continue; // handled by the close pass below
+              const diff = await describeBranch(branch);
+              const newBody = renderBody(entry, diff);
+              if (newBody === issue.body) continue;
+              await github.rest.issues.update({
+                owner, repo, issue_number: issue.number, body: newBody,
+              });
+              updated += 1;
+              core.info(`Updated #${issue.number} for ${branch}`);
             }
 
             // The close pass below trusts `entries` to be a complete picture of what
@@ -214,4 +305,4 @@ jobs:
               core.info(`Closed #${issue.number} for ${branch}`);
             }
 
-            core.notice(`Renovate queue synced: ${created} created, ${closed} closed.`);
+            core.notice(`Renovate queue synced: ${created} created, ${updated} updated, ${closed} closed.`);
