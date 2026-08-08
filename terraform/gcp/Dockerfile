@@ -1,9 +1,9 @@
-FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:523.0.1-slim AS builder
+FROM --platform=$BUILDPLATFORM gcr.io/google.com/cloudsdktool/cloud-sdk:579.0.0-slim AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
 ARG TFSEC_VERSION="1.28.14"
-ARG TFLINT_VERSION="0.58.0"
+ARG TFLINT_VERSION="0.64.0"
 ARG TFV_VERSION="0.2.1"
 
 RUN apt-get update -y \
@@ -24,7 +24,7 @@ RUN apt-get update -y \
 ########################################
 # Final Build Stage
 ########################################
-FROM gcr.io/google.com/cloudsdktool/cloud-sdk:523.0.1-slim
+FROM gcr.io/google.com/cloudsdktool/cloud-sdk:579.0.0-slim
 
 COPY --from=builder /usr/local/bin/tfsec /usr/local/bin/tfsec
 COPY --from=builder /usr/local/bin/tflint /usr/local/bin/tflint
