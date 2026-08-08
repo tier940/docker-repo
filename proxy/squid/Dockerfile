@@ -1,10 +1,10 @@
-FROM --platform=$BUILDPLATFORM docker.io/alpine:3.21
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.24
 
 LABEL maintainer="tier940"
 
 # Squid install
 RUN apk update \
-  && apk add --no-cache squid~=6.12-r0
+  && apk add --no-cache squid~=7.6-r0
 
 COPY squid.conf.opt /etc/squid/squid.conf
 COPY lxc-whitelist /etc/squid/whitelist
