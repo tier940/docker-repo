@@ -50,14 +50,34 @@ jobs:
 
             // Dashboard sections holding updates that are waiting on us. Sections
             // such as "Open" (already a PR) or "Detected Dependencies" are skipped.
+            // Taken verbatim from Renovate's dashboard renderer (the `title` argument
+            // to getBranchesListMd in lib/workers/repository/dependency-dashboard.ts),
+            // lowercased. Every section that means "not updated yet" is listed, so an
+            // update is visible as an issue no matter which state it is sitting in.
             const PENDING_SECTIONS = [
               'pending approval',
+              'group size not met',
               'awaiting schedule',
               'rate-limited',
-              'edited/blocked',
               'errored',
-              'closed/ignored',
-              'ignored or blocked',
+              'pr creation approval required',
+              'pr edited (blocked)',
+              'pending status checks',
+              'pending branch automerge',
+              'other branches',
+              'pr closed (blocked)',
+            ];
+
+            // Sections that are not pending work: an update already has a PR, or the
+            // heading is informational. Listed so the unrecognised-section warning
+            // stays quiet for them.
+            const KNOWN_OTHER_SECTIONS = [
+              'open',
+              'detected dependencies',
+              'repository problems',
+              'deprecations / replacements',
+              'abandoned dependencies',
+              'vulnerabilities',
             ];
 
             const dashboard = await github.rest.issues.get({
@@ -102,7 +122,7 @@ jobs:
             // get skipped, no issues appear, and nothing errors.
             core.info(`Dashboard sections: ${seenSections.join(', ') || '(none)'}`);
             const unmatched = seenSections.filter(
-              (s) => !PENDING_SECTIONS.includes(s) && s !== 'detected dependencies' && s !== 'open',
+              (s) => !PENDING_SECTIONS.includes(s) && !KNOWN_OTHER_SECTIONS.includes(s),
             );
             if (unmatched.length) {
               core.warning(`Unrecognised dashboard section(s), entries skipped: ${unmatched.join(', ')}`);
