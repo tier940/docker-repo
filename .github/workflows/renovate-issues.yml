@@ -130,15 +130,17 @@ jobs:
               if (byBranch.has(entry.branch)) continue;
 
               const issueBody = [
-                `Renovate has an update waiting on the [Dependency Dashboard](../issues/${dashboardNumber}).`,
+                'A dependency update is available.',
                 '',
                 `- **Update**: ${entry.title}`,
                 `- **Branch**: \`${entry.branch}\``,
-                `- **Dashboard section**: ${entry.section}`,
                 '',
-                `To start it, tick this update's checkbox on issue #${dashboardNumber}.`,
-                'Renovate then opens the pull request. This issue closes automatically',
-                'once the update is no longer pending on the dashboard.',
+                'Do the update however you like — by hand, or on a branch of your own.',
+                'Once the new version has landed, Renovate stops listing it and this',
+                'issue closes itself on the next sync. Closing it yourself means the',
+                'update is declined, and it will not be raised again.',
+                '',
+                `Listed on the [Dependency Dashboard](../issues/${dashboardNumber}) as: ${entry.section}`,
                 '',
                 `<!-- renovate-branch=${entry.branch} -->`,
               ].join('\n');
@@ -151,6 +153,19 @@ jobs:
               });
               created += 1;
               core.info(`Created #${made.data.number} for ${entry.branch}`);
+            }
+
+            // The close pass below trusts `entries` to be a complete picture of what
+            // is pending. If parsing went wrong — a renamed section, an unexpected
+            // body — that picture is empty or partial, and closing against it would
+            // wipe the queue. Fail loudly instead; creation above is safe to keep.
+            if (unmatched.length || (entries.size === 0 && byBranch.size > 0)) {
+              core.setFailed(
+                'Dashboard parse looks wrong (unrecognised sections, or no entries ' +
+                'while tracking issues exist). Skipping the close pass so the queue ' +
+                'is not wiped. Check the section names against issue #' + dashboardNumber + '.',
+              );
+              return;
             }
 
             // Anything no longer pending has been approved, merged or superseded.
