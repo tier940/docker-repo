@@ -1,3 +1,5 @@
+Based on Alpine 3.24 with squid 7.6.
+
 ## normal usage
 ### One line command
 - `cp -r ./squid.conf.opt ./squid.conf`
@@ -6,6 +8,20 @@
 ### docker compose
 - `cp -r ./squid.conf.opt ./squid.conf`
 - `docker compose up -d`
+
+### Upgrading from squid 6
+`compose.yml` mounts your own `./squid.conf` over the one baked into the image,
+so updating the image alone does not update your config. Re-copy it:
+
+- `cp -r ./squid.conf.opt ./squid.conf`
+
+squid 7 rejects two directives the old config carried. If you keep a
+hand-edited `squid.conf`, drop them yourself:
+
+- `cache_dir null /tmp` — the null store was removed. Caching is already off via
+  `cache deny all` and `cache_mem 0 MB`, so just delete the line.
+- `acl localhost src 127.0.0.1/32 ::1` — `localhost` is now a built-in ACL and
+  redeclaring it warns on every start.
 
 
 
