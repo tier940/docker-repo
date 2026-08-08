@@ -21,15 +21,17 @@ services:
       - redis
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=false
-      - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CORE__EXECUTION_API_SERVER_URL=http://webserver:8080/execution/
+      - AIRFLOW__API_AUTH__JWT_SECRET=${AIRFLOW_JWT_SECRET}
     volumes:
       - ./dags:/opt/airflow/dags
     ports:
       - "8080:8080"
-    command: webserver
+    command: api-server
     healthcheck:
-      test: ["CMD-SHELL", "[ -f /opt/airflow/airflow-webserver.pid ]"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/v2/monitor/health"]
       interval: 30s
       timeout: 30s
       retries: 3
@@ -53,14 +55,50 @@ services:
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - webserver
+      webserver:
+        condition: service_healthy
     volumes:
       - ./dags:/opt/airflow/dags
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=false
-      - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CORE__EXECUTION_API_SERVER_URL=http://webserver:8080/execution/
+      - AIRFLOW__API_AUTH__JWT_SECRET=${AIRFLOW_JWT_SECRET}
     command: airflow scheduler
+
+  dag-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      webserver:
+        condition: service_healthy
+    volumes:
+      - ./dags:/opt/airflow/dags
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CORE__EXECUTION_API_SERVER_URL=http://webserver:8080/execution/
+      - AIRFLOW__API_AUTH__JWT_SECRET=${AIRFLOW_JWT_SECRET}
+    command: airflow dag-processor
+
+  triggerer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      webserver:
+        condition: service_healthy
+    environment:
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CORE__EXECUTION_API_SERVER_URL=http://webserver:8080/execution/
+      - AIRFLOW__API_AUTH__JWT_SECRET=${AIRFLOW_JWT_SECRET}
+    command: airflow triggerer
 
   worker:
     build:
@@ -72,6 +110,8 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
     environment:
-      - AIRFLOW__CORE__FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY}
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CORE__EXECUTION_API_SERVER_URL=http://webserver:8080/execution/
+      - AIRFLOW__API_AUTH__JWT_SECRET=${AIRFLOW_JWT_SECRET}
     command: airflow celery worker

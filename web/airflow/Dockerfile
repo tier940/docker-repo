@@ -1,13 +1,12 @@
-FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:2.11.0-python3.12
+FROM --platform=$BUILDPLATFORM docker.io/apache/airflow:3.2.2-python3.14
 
 # Setup Airflow
-ENV AIRFLOW_VERSION=2.11.0
-ENV PYTHON_VERSION=3.12
+ENV AIRFLOW_VERSION=3.2.2
+ENV PYTHON_VERSION=3.14
 COPY webserver_config.py $AIRFLOW_HOME/
 COPY dags $AIRFLOW_HOME/dags
 RUN pip install uv \
-    && uv venv \
-    && uv pip install "apache-airflow[crypto,celery,google,postgres]==${AIRFLOW_VERSION}"
+    && uv pip install "apache-airflow[celery,google,postgres,fab,standard]==${AIRFLOW_VERSION}"
 
 USER root
 COPY entrypoint.sh /entrypoint.sh
