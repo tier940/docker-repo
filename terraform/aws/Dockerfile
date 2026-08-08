@@ -6,7 +6,7 @@ ARG TFSEC_VERSION="1.28.14"
 ARG TFLINT_VERSION="0.64.0"
 ARG TFV_VERSION="0.2.1"
 
-RUN yum install -y shadow-utils tzdata git tar unzip curl > /dev/null \
+RUN yum install -y shadow-utils tzdata git tar unzip > /dev/null \
     && yum clean all -y > /dev/null \
     && curl -Ls -o /usr/local/bin/aws-vault https://github.com/99designs/aws-vault/releases/download/v${AWS_VAULT_VERSION}/aws-vault-${TARGETOS}-${TARGETARCH} \
     && chmod +x /usr/local/bin/aws-vault \
