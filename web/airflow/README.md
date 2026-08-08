@@ -93,7 +93,7 @@ This can be used to scale to a multi node setup using docker swarm.
 
 If you want to run other airflow sub-commands, such as `list_dags` or `clear` you can do so like this:
 
-    docker run --rm -ti ghcr.io/tier940/airflow airflow dags list
+    docker run --rm -ti ghcr.io/tier940/airflow2 airflow dags list
 
 or with your docker-compose set up like this:
 
@@ -101,8 +101,8 @@ or with your docker-compose set up like this:
 
 You can also use this to run a bash shell or any other command in the same environment that airflow would be run in:
 
-    docker run --rm -ti ghcr.io/tier940/airflow bash
-    docker run --rm -ti ghcr.io/tier940/airflow ipython
+    docker run --rm -ti ghcr.io/tier940/airflow2 bash
+    docker run --rm -ti ghcr.io/tier940/airflow2 ipython
 
 # Simplified SQL database configuration using PostgreSQL
 
