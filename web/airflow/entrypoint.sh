@@ -10,7 +10,7 @@ TRY_LOOP="20"
 # Global defaults and back-compat
 : "${AIRFLOW_HOME:="/opt/airflow"}"
 : "${AIRFLOW__CORE__FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}"
-: "${AIRFLOW__CORE__EXECUTOR:="SequentialExecutor"}"
+: "${AIRFLOW__CORE__EXECUTOR:="LocalExecutor"}"
 
 export \
   AIRFLOW_HOME \
@@ -37,40 +37,39 @@ wait_for_port() {
   done
 }
 
-# Other executors than SequentialExecutor drive the need for an SQL database, here PostgreSQL is used
-if [ "$AIRFLOW__CORE__EXECUTOR" != "SequentialExecutor" ]; then
-  # Check if the user has provided explicit Airflow configuration concerning the database
-  if [ -z "$AIRFLOW__CORE__SQL_ALCHEMY_CONN" ]; then
-    # Default values corresponding to the default compose files
-    : "${POSTGRES_HOST:="postgres"}"
-    : "${POSTGRES_PORT:="5432"}"
-    : "${POSTGRES_USER:="airflow"}"
-    : "${POSTGRES_PASSWORD:="airflow"}"
-    : "${POSTGRES_DB:="airflow"}"
-    : "${POSTGRES_EXTRAS:-""}"
+# Airflow 3 removed SequentialExecutor, so every executor needs an SQL database,
+# here PostgreSQL is used.
+# Check if the user has provided explicit Airflow configuration concerning the database
+if [ -z "$AIRFLOW__DATABASE__SQL_ALCHEMY_CONN" ]; then
+  # Default values corresponding to the default compose files
+  : "${POSTGRES_HOST:="postgres"}"
+  : "${POSTGRES_PORT:="5432"}"
+  : "${POSTGRES_USER:="airflow"}"
+  : "${POSTGRES_PASSWORD:="airflow"}"
+  : "${POSTGRES_DB:="airflow"}"
+  : "${POSTGRES_EXTRAS:-""}"
 
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN="postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"
-    export AIRFLOW__CORE__SQL_ALCHEMY_CONN
+  AIRFLOW__DATABASE__SQL_ALCHEMY_CONN="postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"
+  export AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
 
-    # Check if the user has provided explicit Airflow configuration for the broker's connection to the database
-    if [ "$AIRFLOW__CORE__EXECUTOR" = "CeleryExecutor" ]; then
-      AIRFLOW__CELERY__RESULT_BACKEND="db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"
-      export AIRFLOW__CELERY__RESULT_BACKEND
-    fi
-  else
-    if [[ "$AIRFLOW__CORE__EXECUTOR" == "CeleryExecutor" && -z "$AIRFLOW__CELERY__RESULT_BACKEND" ]]; then
-      >&2 printf '%s\n' "FATAL: if you set AIRFLOW__CORE__SQL_ALCHEMY_CONN manually with CeleryExecutor you must also set AIRFLOW__CELERY__RESULT_BACKEND"
-      exit 1
-    fi
-
-    # Derive useful variables from the AIRFLOW__ variables provided explicitly by the user
-    POSTGRES_ENDPOINT=$(echo -n "$AIRFLOW__CORE__SQL_ALCHEMY_CONN" | cut -d '/' -f3 | sed -e 's,.*@,,')
-    POSTGRES_HOST=$(echo -n "$POSTGRES_ENDPOINT" | cut -d ':' -f1)
-    POSTGRES_PORT=$(echo -n "$POSTGRES_ENDPOINT" | cut -d ':' -f2)
+  # Check if the user has provided explicit Airflow configuration for the broker's connection to the database
+  if [ "$AIRFLOW__CORE__EXECUTOR" = "CeleryExecutor" ]; then
+    AIRFLOW__CELERY__RESULT_BACKEND="db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"
+    export AIRFLOW__CELERY__RESULT_BACKEND
+  fi
+else
+  if [[ "$AIRFLOW__CORE__EXECUTOR" == "CeleryExecutor" && -z "$AIRFLOW__CELERY__RESULT_BACKEND" ]]; then
+    >&2 printf '%s\n' "FATAL: if you set AIRFLOW__DATABASE__SQL_ALCHEMY_CONN manually with CeleryExecutor you must also set AIRFLOW__CELERY__RESULT_BACKEND"
+    exit 1
   fi
 
-  wait_for_port "Postgres" "$POSTGRES_HOST" "$POSTGRES_PORT"
+  # Derive useful variables from the AIRFLOW__ variables provided explicitly by the user
+  POSTGRES_ENDPOINT=$(echo -n "$AIRFLOW__DATABASE__SQL_ALCHEMY_CONN" | cut -d '/' -f3 | sed -e 's,.*@,,')
+  POSTGRES_HOST=$(echo -n "$POSTGRES_ENDPOINT" | cut -d ':' -f1)
+  POSTGRES_PORT=$(echo -n "$POSTGRES_ENDPOINT" | cut -d ':' -f2)
 fi
+
+wait_for_port "Postgres" "$POSTGRES_HOST" "$POSTGRES_PORT"
 
 # CeleryExecutor drives the need for a Celery broker, here Redis is used
 if [ "$AIRFLOW__CORE__EXECUTOR" = "CeleryExecutor" ]; then
@@ -103,13 +102,9 @@ if [ "$AIRFLOW__CORE__EXECUTOR" = "CeleryExecutor" ]; then
 fi
 
 case "$1" in
-  webserver)
-    airflow db init
-    if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ] || [ "$AIRFLOW__CORE__EXECUTOR" = "SequentialExecutor" ]; then
-      # With the "Local" and "Sequential" executors it should all run in one container.
-      airflow scheduler -D
-    fi
-    exec airflow webserver
+  api-server)
+    airflow db migrate
+    exec airflow api-server
     ;;
   *)
     exec "$@"

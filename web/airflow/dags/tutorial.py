@@ -2,10 +2,10 @@ from datetime import datetime, timedelta
 from textwrap import dedent
 
 # The DAG object; we'll need this to instantiate a DAG
-from airflow import DAG
+from airflow.sdk import DAG
 
 # Operators; we need this to operate!
-from airflow.operators.bash import BashOperator
+from airflow.providers.standard.operators.bash import BashOperator
 with DAG(
     'tutorial',
     # These args will get passed on to each operator
@@ -31,7 +31,7 @@ with DAG(
         # 'trigger_rule': 'all_success'
     },
     description='A simple tutorial DAG',
-    schedule_interval=timedelta(days=1),
+    schedule=timedelta(days=1),
     start_date=datetime(2021, 1, 1),
     catchup=False,
     tags=['example'],
@@ -67,8 +67,8 @@ with DAG(
     templated_command = dedent(
         """
     {% for i in range(5) %}
-        echo "{{ ds }}"
-        echo "{{ macros.ds_add(ds, 7)}}"
+        echo "{{ dag_run.start_date | ds }}"
+        echo "{{ macros.ds_add(dag_run.start_date | ds, 7) }}"
     {% endfor %}
     """
     )
