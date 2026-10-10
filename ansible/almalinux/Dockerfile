@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/almalinux:9.6
+FROM --platform=$BUILDPLATFORM docker.io/almalinux:9.8
 
 ENV container docker
 LABEL maintainer="tier940"
