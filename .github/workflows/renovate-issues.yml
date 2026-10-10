@@ -31,7 +31,7 @@ jobs:
     if: github.event_name != 'issues' || github.event.issue.number == 7
     steps:
       - name: Sync dashboard entries to issues
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           DASHBOARD_ISSUE: ${{ env.DASHBOARD_ISSUE }}
           QUEUE_LABEL: ${{ env.QUEUE_LABEL }}
