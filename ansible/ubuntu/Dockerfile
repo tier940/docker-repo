@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/ubuntu:24.04
+FROM --platform=$BUILDPLATFORM docker.io/ubuntu:26.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV container docker

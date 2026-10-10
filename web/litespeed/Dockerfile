@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/ubuntu:22.04
+FROM --platform=$BUILDPLATFORM docker.io/ubuntu:26.04
 
 LABEL maintainer="tier940"
 
