@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM docker.io/rockylinux:9.3
+FROM --platform=$BUILDPLATFORM docker.io/rockylinux:9.9
 
 ENV container docker
 LABEL maintainer="tier940"
